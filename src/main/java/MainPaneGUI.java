@@ -1,49 +1,78 @@
 
+import java.time.*;
+import java.time.format.*;
+import javafx.collections.*;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
+import javafx.scene.paint.Color;
 
 public class MainPaneGUI extends HBox {
 
-    protected final VBox vBox;
-    protected final VBox vBox0;
-    protected final DatePicker datePicker;
-    protected final ComboBox comboBox;
-    protected final Button button;
-    protected final Separator separator;
-    protected final Label label;
-    protected final TableView tableView;
-    protected final TableColumn tableColumn;
-    protected final TableColumn tableColumn0;
-    protected final Button button0;
-    protected final Separator separator0;
-    protected final VBox vBox1;
-    protected final Label label0;
-    protected final TableView tableView0;
-    protected final TableColumn tableColumn1;
-    protected final TableColumn tableColumn2;
-    protected final Button button1;
+    private VBox leftVBox;
+    private VBox searchVBox;
+    private DatePicker datePicker;
+    private ComboBox timePicker;
+    private Button searchButton;
+    private Label errorLabel;
+    private Separator leftSeparator;
+    private Label myReservationsLabel;
+    private ReservationsTable reservationsTable;
+    private Button deleteReservationButton;
+    private Separator verticalSeparator;
+    private VBox rightVBox;
+    private Label availableRoomsLabel;
+    private AvailableRoomsTable availableRoomsTable;
+    private Button reserveButton;
+    private Pane mapPane;
+
+    private void buildSearchButton() {
+        searchButton = new Button();
+        searchButton.setMaxWidth(Double.MAX_VALUE);
+        searchButton.setMnemonicParsing(false);
+        searchButton.setText("SEARCH");
+        searchButton.setOnAction(e -> {
+            LocalDate date = datePicker.getValue();
+            String time = timePicker.getValue() + ":00";
+            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter dtt = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+            if ((date != null) && (time != null)) {
+                LocalTime l = LocalTime.parse(time);
+                if (date.isEqual(LocalDate.now()) && (l.isBefore(LocalTime.now()))) {
+                    errorLabel.setText("This program is not able to go back in time");
+
+                } else {
+                    String dateString = date.format(formatter);
+                    PCBookingApplicationController.loadRooms(dateString, time);
+                }
+            } else {
+                errorLabel.setText("Please, select date and time first");
+            }
+        });
+    }
 
     public MainPaneGUI() {
 
-        vBox = new VBox();
-        vBox0 = new VBox();
+        leftVBox = new VBox();
+        searchVBox = new VBox();
         datePicker = new DatePicker();
-        comboBox = new ComboBox();
-        button = new Button();
-        separator = new Separator();
-        label = new Label();
-        tableView = new TableView();
-        tableColumn = new TableColumn();
-        tableColumn0 = new TableColumn();
-        button0 = new Button();
-        separator0 = new Separator();
-        vBox1 = new VBox();
-        label0 = new Label();
-        tableView0 = new TableView();
-        tableColumn1 = new TableColumn();
-        tableColumn2 = new TableColumn();
-        button1 = new Button();
+        timePicker = new ComboBox(FXCollections.observableArrayList("08:30", "09:30", "10:30", "11:30", "12:30", "13:30", "14:30", "15:30", "16:30", "17:30"));
+        errorLabel = new Label("");
+        leftSeparator = new Separator();
+        myReservationsLabel = new Label();
+        reservationsTable = new ReservationsTable();
+        deleteReservationButton = new Button();
+        verticalSeparator = new Separator();
+        rightVBox = new VBox();
+        availableRoomsLabel = new Label();
+        availableRoomsTable = new AvailableRoomsTable();
+        reserveButton = new Button();
+        mapPane = new Pane();
+
+        buildSearchButton();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -52,86 +81,73 @@ public class MainPaneGUI extends HBox {
         setPrefHeight(600.0);
         setPrefWidth(800.0);
 
-        vBox.setPrefHeight(560.0);
-        vBox.setPrefWidth(363.0);
+        leftVBox.setPrefHeight(560.0);
+        leftVBox.setPrefWidth(363.0);
 
-        vBox0.setMaxHeight(USE_PREF_SIZE);
-        vBox0.setMaxWidth(USE_PREF_SIZE);
-        vBox0.setMinHeight(USE_PREF_SIZE);
-        vBox0.setMinWidth(USE_PREF_SIZE);
-        vBox0.setPrefHeight(113.0);
-        vBox0.setPrefWidth(146.0);
-        vBox0.setSpacing(15.0);
+        searchVBox.setMaxHeight(USE_PREF_SIZE);
+        searchVBox.setMaxWidth(USE_PREF_SIZE);
+        searchVBox.setMinHeight(USE_PREF_SIZE);
+        searchVBox.setMinWidth(USE_PREF_SIZE);
+        searchVBox.setPrefHeight(113.0);
+        searchVBox.setPrefWidth(146.0);
+        searchVBox.setSpacing(15.0);
 
-        comboBox.setPrefWidth(150.0);
+        timePicker.setPrefWidth(150.0);
 
-        button.setMaxWidth(Double.MAX_VALUE);
-        button.setMnemonicParsing(false);
-        button.setText("SEARCH");
+        leftSeparator.setPrefWidth(200.0);
+        VBox.setMargin(leftSeparator, new Insets(50.0, 0.0, 50.0, 0.0));
 
-        separator.setPrefWidth(200.0);
-        VBox.setMargin(separator, new Insets(50.0, 0.0, 20.0, 0.0));
+        myReservationsLabel.setText("My reservations:");
 
-        label.setText("My reservations:");
+        VBox.setMargin(reservationsTable, new Insets(20.0, 0.0, 0.0, 0.0));
 
-        tableView.setPrefHeight(378.0);
-        tableView.setPrefWidth(352.0);
+        deleteReservationButton.setMnemonicParsing(false);
+        deleteReservationButton.setText("Delete reservation");
+        VBox.setMargin(deleteReservationButton, new Insets(20.0, 0.0, 0.0, 0.0));
+        HBox.setMargin(leftVBox, new Insets(20.0));
 
-        tableColumn.setPrefWidth(75.0);
-        tableColumn.setText("C1");
+        errorLabel.setTextFill(Color.RED);
+        errorLabel.setAlignment(Pos.CENTER_LEFT);
 
-        tableColumn0.setPrefWidth(75.0);
-        tableColumn0.setText("C2");
-        VBox.setMargin(tableView, new Insets(20.0, 0.0, 0.0, 0.0));
+        verticalSeparator.setOrientation(javafx.geometry.Orientation.VERTICAL);
+        verticalSeparator.setPrefHeight(200.0);
 
-        button0.setMnemonicParsing(false);
-        button0.setText("Delete reservation");
-        VBox.setMargin(button0, new Insets(20.0, 0.0, 0.0, 0.0));
-        HBox.setMargin(vBox, new Insets(20.0));
+        rightVBox.setMaxWidth(Double.MAX_VALUE);
+        rightVBox.setPrefHeight(560.0);
+        rightVBox.setPrefWidth(373.0);
 
-        separator0.setOrientation(javafx.geometry.Orientation.VERTICAL);
-        separator0.setPrefHeight(200.0);
-        separator0.setStyle("-fx-background-color: light-grey;");
+        availableRoomsLabel.setText("Available rooms:");
 
-        vBox1.setMaxWidth(Double.MAX_VALUE);
-        vBox1.setPrefHeight(560.0);
-        vBox1.setPrefWidth(373.0);
+        VBox.setMargin(availableRoomsTable, new Insets(20.0, 0.0, 0.0, 0.0));
 
-        label0.setText("Available rooms:");
+        reserveButton.setMnemonicParsing(false);
+        reserveButton.setText("Reserve");
+        VBox.setMargin(reserveButton, new Insets(20.0, 0.0, 0.0, 0.0));
 
-        tableView0.setPrefHeight(502.0);
-        tableView0.setPrefWidth(362.0);
+        mapPane.setId("mapPane");
+        mapPane.setPrefHeight(400.0);
+        mapPane.setPrefWidth(200.0);
+        VBox.setMargin(mapPane, new Insets(50.0, 0.0, 0.0, 0.0));
 
-        tableColumn1.setPrefWidth(75.0);
-        tableColumn1.setText("C1");
+        searchVBox.getChildren().add(datePicker);
+        searchVBox.getChildren().add(timePicker);
+        searchVBox.getChildren().add(searchButton);
+        leftVBox.getChildren().add(searchVBox);
+        leftVBox.getChildren().add(errorLabel);
+        leftVBox.getChildren().add(leftSeparator);
+        leftVBox.getChildren().add(myReservationsLabel);
+        leftVBox.getChildren().add(reservationsTable);
+        leftVBox.getChildren().add(deleteReservationButton);
+        getChildren().add(leftVBox);
+        getChildren().add(verticalSeparator);
+        rightVBox.getChildren().add(availableRoomsLabel);
+        rightVBox.getChildren().add(availableRoomsTable);
+        rightVBox.getChildren().add(reserveButton);
+        rightVBox.getChildren().add(mapPane);
+        getChildren().add(rightVBox);
 
-        tableColumn2.setPrefWidth(75.0);
-        tableColumn2.setText("C2");
-        VBox.setMargin(tableView0, new Insets(20.0, 0.0, 0.0, 0.0));
-
-        button1.setMnemonicParsing(false);
-        button1.setText("Reserve");
-        VBox.setMargin(button1, new Insets(20.0, 0.0, 0.0, 0.0));
-        HBox.setMargin(vBox1, new Insets(20.0));
-
-        vBox0.getChildren().add(datePicker);
-        vBox0.getChildren().add(comboBox);
-        vBox0.getChildren().add(button);
-        vBox.getChildren().add(vBox0);
-        vBox.getChildren().add(separator);
-        vBox.getChildren().add(label);
-        tableView.getColumns().add(tableColumn);
-        tableView.getColumns().add(tableColumn0);
-        vBox.getChildren().add(tableView);
-        vBox.getChildren().add(button0);
-        getChildren().add(vBox);
-        getChildren().add(separator0);
-        vBox1.getChildren().add(label0);
-        tableView0.getColumns().add(tableColumn1);
-        tableView0.getColumns().add(tableColumn2);
-        vBox1.getChildren().add(tableView0);
-        vBox1.getChildren().add(button1);
-        getChildren().add(vBox1);
+        reserveButton.setDisable(true);
+        deleteReservationButton.setDisable(true);
 
     }
 }
