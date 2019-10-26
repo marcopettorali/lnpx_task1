@@ -1,5 +1,7 @@
+
 import java.time.*;
 import java.time.format.*;
+import java.util.ArrayList;
 import javafx.collections.*;
 import javafx.geometry.*;
 import javafx.scene.control.*;
@@ -34,7 +36,7 @@ public class MainPaneGUI extends HBox {
         searchButton.setOnAction(e -> {
             LocalDate date = datePicker.getValue();
             String time = timePicker.getValue() + ":00";
-            
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             DateTimeFormatter dtt = DateTimeFormatter.ofPattern("HH:mm:ss");
 
@@ -99,6 +101,8 @@ public class MainPaneGUI extends HBox {
         myReservationsLabel.setText("My reservations:");
 
         VBox.setMargin(reservationsTable, new Insets(20.0, 0.0, 0.0, 0.0));
+        ArrayList<Reservation> userReservations = DBManager.loadUserReservations(User.username);
+        reservationsTable.setItems(userReservations);
 
         deleteReservationButton.setMnemonicParsing(false);
         deleteReservationButton.setText("Delete reservation");
@@ -146,7 +150,6 @@ public class MainPaneGUI extends HBox {
         getChildren().add(rightVBox);
 
         reserveButton.setDisable(true);
-        deleteReservationButton.setDisable(true);
 
     }
 }
