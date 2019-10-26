@@ -1,7 +1,9 @@
 
+import java.util.ArrayList;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 public class LoginPaneGUI extends AnchorPane {
 
@@ -13,6 +15,7 @@ public class LoginPaneGUI extends AnchorPane {
     private TextField visiblePasswordTextField;
     private CheckBox showPasswordCheckBox;
     private Button loginButton;
+    private Label errorLabel;
 
     public void buildLoginButton() {
         loginButton = new Button();
@@ -21,7 +24,9 @@ public class LoginPaneGUI extends AnchorPane {
         loginButton.setText("LOGIN");
         VBox.setMargin(loginButton, new Insets(50.0, 0.0, 0.0, 0.0));
         loginButton.setOnAction(e -> {
-            PCBookingApplicationController.login(usernameTextField.getText(), passwordTextField.getText());
+            if (!PCBookingApplicationController.login(usernameTextField.getText(), passwordTextField.getText())) {
+                errorLabel.setText("Username or password not valid");
+            }
         });
 
     }
@@ -35,6 +40,7 @@ public class LoginPaneGUI extends AnchorPane {
         passwordTextField = new PasswordField();
         visiblePasswordTextField = new TextField();
         showPasswordCheckBox = new CheckBox();
+        errorLabel = new Label("");
 
         buildLoginButton();
 
@@ -74,13 +80,18 @@ public class LoginPaneGUI extends AnchorPane {
 
         visiblePasswordTextField.textProperty().bindBidirectional(passwordTextField.textProperty());
 
+        errorLabel.setTextFill(Color.RED);
+        errorLabel.setAlignment(Pos.CENTER_LEFT);
+
         loginVBox.getChildren().add(usernameLabel);
         loginVBox.getChildren().add(usernameTextField);
         loginVBox.getChildren().add(passwordLabel);
         loginVBox.getChildren().add(passwordTextField);
         loginVBox.getChildren().add(visiblePasswordTextField);
         loginVBox.getChildren().add(showPasswordCheckBox);
+        loginVBox.getChildren().add(errorLabel);
         loginVBox.getChildren().add(loginButton);
+
         getChildren().add(loginVBox);
 
     }
