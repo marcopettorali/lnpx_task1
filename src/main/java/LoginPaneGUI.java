@@ -5,53 +5,83 @@ import javafx.scene.layout.*;
 
 public class LoginPaneGUI extends AnchorPane {
 
-    protected final VBox vBox;
-    protected final Label label;
-    protected final TextField textField;
-    protected final Label label0;
-    protected final PasswordField passwordField;
-    protected final CheckBox checkBox;
-    protected final Button button;
+    private VBox loginVBox;
+    private Label usernameLabel;
+    private TextField usernameTextField;
+    private Label passwordLabel;
+    private PasswordField passwordTextField;
+    private TextField visiblePasswordTextField;
+    private CheckBox showPasswordCheckBox;
+    private Button loginButton;
+
+    public void buildLoginButton() {
+        loginButton = new Button();
+        loginButton.setId("loginButton");
+        loginButton.setMaxWidth(Double.MAX_VALUE);
+        loginButton.setText("LOGIN");
+        VBox.setMargin(loginButton, new Insets(50.0, 0.0, 0.0, 0.0));
+        loginButton.setOnAction(e -> {
+            PCBookingApplicationController.login(usernameTextField.getText(), passwordTextField.getText());
+        });
+
+    }
 
     public LoginPaneGUI() {
 
-        vBox = new VBox();
-        label = new Label();
-        textField = new TextField();
-        label0 = new Label();
-        passwordField = new PasswordField();
-        checkBox = new CheckBox();
-        button = new Button();
+        loginVBox = new VBox();
+        usernameLabel = new Label();
+        usernameTextField = new TextField();
+        passwordLabel = new Label();
+        passwordTextField = new PasswordField();
+        visiblePasswordTextField = new TextField();
+        showPasswordCheckBox = new CheckBox();
 
-        setId("AnchorPane");
+        buildLoginButton();
+
+        setId("loginPane");
         setPrefHeight(370.0);
         setPrefWidth(339.0);
 
-        vBox.setLayoutX(60.0);
-        vBox.setLayoutY(71.0);
-        vBox.setPrefHeight(114.0);
-        vBox.setPrefWidth(220.0);
-        vBox.setSpacing(15.0);
+        loginVBox.setId("loginVBox");
+        loginVBox.setLayoutX(60.0);
+        loginVBox.setLayoutY(71.0);
+        loginVBox.setPrefHeight(114.0);
+        loginVBox.setPrefWidth(220.0);
+        loginVBox.setSpacing(15.0);
 
-        label.setText("Username:");
+        usernameLabel.setId("usernameLabel");
+        usernameLabel.setText("Username:");
 
-        label0.setText("Password:");
+        usernameTextField.setId("usernameTextField");
 
-        checkBox.setMnemonicParsing(false);
-        checkBox.setText("Show/hide password");
+        passwordLabel.setId("passwordLabel");
+        passwordLabel.setText("Password:");
 
-        button.setMaxWidth(Double.MAX_VALUE);
-        button.setMnemonicParsing(false);
-        button.setText("LOGIN");
-        VBox.setMargin(button, new Insets(50.0, 0.0, 0.0, 0.0));
+        passwordTextField.setId("passwordTextField");
 
-        vBox.getChildren().add(label);
-        vBox.getChildren().add(textField);
-        vBox.getChildren().add(label0);
-        vBox.getChildren().add(passwordField);
-        vBox.getChildren().add(checkBox);
-        vBox.getChildren().add(button);
-        getChildren().add(vBox);
+        showPasswordCheckBox.setId("showPasswordCheckBox");
+        showPasswordCheckBox.setMnemonicParsing(false);
+        showPasswordCheckBox.setText("Show password");
+
+        visiblePasswordTextField.setManaged(false);
+        visiblePasswordTextField.setVisible(false);
+
+        visiblePasswordTextField.managedProperty().bind(showPasswordCheckBox.selectedProperty());
+        visiblePasswordTextField.visibleProperty().bind(showPasswordCheckBox.selectedProperty());
+
+        passwordTextField.managedProperty().bind(showPasswordCheckBox.selectedProperty().not());
+        passwordTextField.visibleProperty().bind(showPasswordCheckBox.selectedProperty().not());
+
+        visiblePasswordTextField.textProperty().bindBidirectional(passwordTextField.textProperty());
+
+        loginVBox.getChildren().add(usernameLabel);
+        loginVBox.getChildren().add(usernameTextField);
+        loginVBox.getChildren().add(passwordLabel);
+        loginVBox.getChildren().add(passwordTextField);
+        loginVBox.getChildren().add(visiblePasswordTextField);
+        loginVBox.getChildren().add(showPasswordCheckBox);
+        loginVBox.getChildren().add(loginButton);
+        getChildren().add(loginVBox);
 
     }
 }
