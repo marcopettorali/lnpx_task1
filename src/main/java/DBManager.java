@@ -5,7 +5,8 @@ import java.time.format.*;
 import java.util.*;
 
 /**
- * DBManager collects all the functions for inserting, removing and updating data in the database
+ * DBManager collects all the functions for inserting, removing and updating
+ * data in the database
  *
  */
 public class DBManager {
@@ -62,17 +63,18 @@ public class DBManager {
 
     static {
         try {
-            DBConnection = DriverManager.getConnection(DBMSFormat + "://" + DBMSAddress + ":" + DBMSPort + "/" + DBName, DBMSUsername, DBMSPassword);
+            DBConnection = DriverManager.getConnection(DBMSFormat + "://" + DBMSAddress + ":" + DBMSPort + "/" + DBName + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", DBMSUsername, DBMSPassword);
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
     }
 
     /**
-     * checkLogin checks if the user is present in the DB. 
-     * If it's present, then loads its personal information
-     * 
-     * @param username it represents the username of the user that is trying to log in
+     * checkLogin checks if the user is present in the DB. If it's present, then
+     * loads its personal information
+     *
+     * @param username it represents the username of the user that is trying to
+     * log in
      * @param password it's the password of the user
      * @return true if the login succeded, false otherwise.
      */
@@ -106,7 +108,9 @@ public class DBManager {
     }
 
     /**
-     * loadUserReservations loads each reservation made by the user for the next days
+     * loadUserReservations loads each reservation made by the user for the next
+     * days
+     *
      * @param username is the username of the user that logged in
      * @return it returns a list of all the reservations made by the user
      */
@@ -138,9 +142,12 @@ public class DBManager {
 
     /**
      * reservePC reserves a PC in the db for a certain user at a certain hour
+     *
      * @param user it's the username of the user
-     * @param rn it's the name of the room in which the selected computer is located
-     * @param pcnumb it's the number of the computer that's been reserved to the user
+     * @param rn it's the name of the room in which the selected computer is
+     * located
+     * @param pcnumb it's the number of the computer that's been reserved to the
+     * user
      * @param D it's the date for which the user asked a reservation
      * @param T it's the hour for which the user asked a reservation
      * @return true if the reservation succeds
@@ -184,14 +191,16 @@ public class DBManager {
 
     /**
      * deleteReservation removes a certain booking from the db
-     * @param user it's the username of the user associated to the booking that we want to remove
+     *
+     * @param user it's the username of the user associated to the booking that
+     * we want to remove
      * @param rn it's the room of the computer associated to the reservation
-     * @param pcnumb it's the number of the computer associated to the reservation
+     * @param pcnumb it's the number of the computer associated to the
+     * reservation
      * @param D it's the date associated to the reservation
      * @param T it's the hour associated to the reservation
      * @return true if the removing succeds
      */
-    
     public static boolean deleteReservation(String user, String rn, int pcnumb, String D, String T) {
         /* rn=RoomName D=Date T=StartTime*/
 
@@ -217,7 +226,9 @@ public class DBManager {
     }
 
     /**
-     * loadRooms loads the state of the rooms of the campus at a given date and time
+     * loadRooms loads the state of the rooms of the campus at a given date and
+     * time
+     *
      * @param D it's the date in which we're intrested to check the rooms' state
      * @param T it's the hour in which we're intrested to check the rooms' state
      * @return it returns a list of all the rooms
@@ -248,13 +259,16 @@ public class DBManager {
         }
         return null;
     }
-    
-    
+
     /**
-     * loadAvailablePCs loads all the PCs that are available in a room at a given date and time
+     * loadAvailablePCs loads all the PCs that are available in a room at a
+     * given date and time
+     *
      * @param rn it's the room name in which we want to look for available PCs
-     * @param D it's the date in which we're interested to look for available PCs
-     * @param T it's the hour in which we're interested to look for available PCs
+     * @param D it's the date in which we're interested to look for available
+     * PCs
+     * @param T it's the hour in which we're interested to look for available
+     * PCs
      * @return it returns a list of all the available PCs
      */
     public static List<PC> loadAvailablePCs(String rn, String D, String T) {

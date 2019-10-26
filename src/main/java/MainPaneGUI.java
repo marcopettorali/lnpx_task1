@@ -42,12 +42,13 @@ public class MainPaneGUI extends HBox {
 
             if ((date != null) && (time != null)) {
                 LocalTime l = LocalTime.parse(time);
-                if (date.isEqual(LocalDate.now()) && (l.isBefore(LocalTime.now()))) {
+                if (date.isBefore(LocalDate.now()) || (date.isEqual(LocalDate.now()) && (l.isBefore(LocalTime.now())))) {
                     errorLabel.setText("This program is not able to go back in time");
-
                 } else {
+                    errorLabel.setText("");
                     String dateString = date.format(formatter);
-                    PCBookingApplicationController.loadRooms(dateString, time);
+                    availableRoomsTable.setItems(PCBookingApplicationController.loadRooms(dateString, time));
+                    reserveButton.setDisable(false);
                 }
             } else {
                 errorLabel.setText("Please, select date and time first");
@@ -93,6 +94,16 @@ public class MainPaneGUI extends HBox {
         searchVBox.setPrefWidth(146.0);
         searchVBox.setSpacing(15.0);
 
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+
+                setDisable(empty || date.compareTo(today) < 0);
+            }
+        });
+        
         timePicker.setPrefWidth(150.0);
 
         leftSeparator.setPrefWidth(200.0);

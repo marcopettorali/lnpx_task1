@@ -20,7 +20,7 @@ public class AvailableRoomsTable extends TableView<Room> {
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public void FillTableAvailableRooms(List<Room> ArrayRooms) {
+    public void setItems(List<Room> ArrayRooms) {
         ObListRoom = FXCollections.observableArrayList();
         ObListRoom.addAll(ArrayRooms);
         this.setItems(ObListRoom);

@@ -41,7 +41,7 @@ public class PCBookingApplicationController extends Application {
     }
 
     public static boolean login(String username, String password) {
-        if (true) {
+        if (DBManager.checkLogin(username, password)) {
             loadMainPane();
             return true;
         } else {

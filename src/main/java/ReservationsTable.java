@@ -28,7 +28,7 @@ public class ReservationsTable extends TableView<Reservation> {
     Questa funzione inserisce all'interno della TabellaPrenotazioni un array 
         di reservation che dovrà essere riempito da DBManager.
      */
-    public void FillTableReservations(ArrayList<Reservation> ArrayReservation) {
+    public void setItems(ArrayList<Reservation> ArrayReservation) {
         ReservationList = FXCollections.observableArrayList();
         for (int i = 0; i < ArrayReservation.size(); i++) {
             ReservationList.add(ArrayReservation.get(i));
