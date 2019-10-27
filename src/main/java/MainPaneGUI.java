@@ -1,7 +1,10 @@
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.time.*;
 import java.time.format.*;
 import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.*;
 import javafx.geometry.*;
 import javafx.scene.control.*;
@@ -16,6 +19,7 @@ public class MainPaneGUI extends HBox {
     private DatePicker datePicker;
     private ComboBox timePicker;
     private Button searchButton;
+    private Button reserveButton;
     private Label errorLabel;
     private Separator leftSeparator;
     private Label myReservationsLabel;
@@ -25,8 +29,89 @@ public class MainPaneGUI extends HBox {
     private VBox rightVBox;
     private Label availableRoomsLabel;
     private AvailableRoomsTable availableRoomsTable;
-    private Button reserveButton;
     private Pane mapPane;
+    private PCIcon[] pcArray = null;
+
+    private void buildDeleteReservationButton() {
+        deleteReservationButton = new Button();
+        deleteReservationButton.setMnemonicParsing(false);
+        deleteReservationButton.setText("Delete reservation");
+        deleteReservationButton.setOnAction(e -> {
+            errorLabel.setText("");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            Reservation selectedReservation = reservationsTable.getSelected();
+            if (selectedReservation != null) {
+                String room = selectedReservation.getRoom();
+                int PCnumber = Integer.parseInt(selectedReservation.getPCnumber());
+                String date = selectedReservation.getDate();
+                String hour = selectedReservation.getHour();
+                mapPane.getChildren().removeAll(pcArray);
+                if(PCBookingApplicationController.deleteReservation(User.username, room, PCnumber, date, hour)){
+                    ArrayList<Reservation> userReservations = DBManager.loadUserReservations(User.username);
+                    reservationsTable.setItems(userReservations);
+                    reservationsTable.relaseSelection();
+                }else{
+                    errorLabel.setText("There was an error during the deletion of the reservation.");
+                }
+            } else {
+                errorLabel.setText("Please select one reservation.");
+            }
+        });
+    }
+
+    private void buildReserveButton() {
+        reserveButton = new Button();
+        reserveButton.setMnemonicParsing(false);
+        reserveButton.setText("Reserve");
+        reserveButton.setOnAction(e -> {
+            errorLabel.setText("");
+            if (pcArray != null) {
+                mapPane.getChildren().removeAll(pcArray);
+                pcArray = null;
+            }
+            Room selectedRoom = availableRoomsTable.getSelected();
+            if (selectedRoom != null) {
+                String roomName = selectedRoom.getRoomName();
+                int roomCapacity = selectedRoom.getCapacity();
+                int rowNumber = selectedRoom.getRowNumber();
+                int avaiablePC = selectedRoom.getAvailablePCs();
+                int index = availableRoomsTable.getSelectionModel().getFocusedIndex();
+                availableRoomsTable.relaseSelection();
+
+                LocalDate date = datePicker.getValue();
+                String time = timePicker.getValue() + ":00";
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter dtt = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+                if ((date != null) && (time != null)) {
+                    LocalTime l = LocalTime.parse(time);
+                    String localTime = l.toString();
+                    String dateString = date.format(formatter);
+
+                    List<PC> avaiablePcList = PCBookingApplicationController.loadAvaiablePCs(roomName, dateString, time);
+                    if (!avaiablePcList.isEmpty()) {
+                        int indexPcSelected = avaiablePcList.get(0).getPCnumber();
+                        if (PCBookingApplicationController.reservePC(User.username, roomName, indexPcSelected, dateString, time)) {
+                            selectedRoom.setAvailablePCs(avaiablePC - 1);
+                            availableRoomsTable.updateRoomsInformation(index, selectedRoom);
+                            pcArray = drawMap(rowNumber, roomCapacity, indexPcSelected);
+                            mapPane.getChildren().addAll(pcArray);
+                            
+                            ArrayList<Reservation> userReservations = DBManager.loadUserReservations(User.username);
+                            reservationsTable.setItems(userReservations);
+                        }
+
+                    } else {
+                        errorLabel.setText("No PC available in this room.");
+                    }
+                }
+
+            } else {
+                errorLabel.setText("Please select one room.");
+            }
+        });
+    }
 
     private void buildSearchButton() {
         searchButton = new Button();
@@ -66,14 +151,14 @@ public class MainPaneGUI extends HBox {
         leftSeparator = new Separator();
         myReservationsLabel = new Label();
         reservationsTable = new ReservationsTable();
-        deleteReservationButton = new Button();
         verticalSeparator = new Separator();
         rightVBox = new VBox();
         availableRoomsLabel = new Label();
         availableRoomsTable = new AvailableRoomsTable();
-        reserveButton = new Button();
         mapPane = new Pane();
 
+        buildDeleteReservationButton();
+        buildReserveButton();
         buildSearchButton();
 
         setMaxHeight(USE_PREF_SIZE);
@@ -103,7 +188,7 @@ public class MainPaneGUI extends HBox {
                 setDisable(empty || date.compareTo(today) < 0);
             }
         });
-        
+
         timePicker.setPrefWidth(150.0);
 
         leftSeparator.setPrefWidth(200.0);
@@ -114,11 +199,6 @@ public class MainPaneGUI extends HBox {
         VBox.setMargin(reservationsTable, new Insets(20.0, 0.0, 0.0, 0.0));
         ArrayList<Reservation> userReservations = DBManager.loadUserReservations(User.username);
         reservationsTable.setItems(userReservations);
-
-        deleteReservationButton.setMnemonicParsing(false);
-        deleteReservationButton.setText("Delete reservation");
-        VBox.setMargin(deleteReservationButton, new Insets(20.0, 0.0, 0.0, 0.0));
-        HBox.setMargin(leftVBox, new Insets(20.0));
 
         errorLabel.setTextFill(Color.RED);
         errorLabel.setAlignment(Pos.CENTER_LEFT);
@@ -132,10 +212,9 @@ public class MainPaneGUI extends HBox {
 
         availableRoomsLabel.setText("Available rooms:");
 
+        VBox.setMargin(deleteReservationButton, new Insets(20.0, 0.0, 0.0, 0.0));
+        HBox.setMargin(leftVBox, new Insets(20.0));
         VBox.setMargin(availableRoomsTable, new Insets(20.0, 0.0, 0.0, 0.0));
-
-        reserveButton.setMnemonicParsing(false);
-        reserveButton.setText("Reserve");
         VBox.setMargin(reserveButton, new Insets(20.0, 0.0, 0.0, 0.0));
 
         mapPane.setId("mapPane");
@@ -162,5 +241,30 @@ public class MainPaneGUI extends HBox {
 
         reserveButton.setDisable(true);
 
+    }
+
+    private PCIcon[] drawMap(int rowNumber, int roomCapacity, int indexPcSelected) {
+        PCIcon[] pcArray = new PCIcon[roomCapacity];
+        int Max = rowNumber;
+        double x_offset;
+        double y_offset;
+        if ((roomCapacity / rowNumber) > rowNumber) {
+            Max = roomCapacity / rowNumber;
+        }
+        double MapSize = mapPane.getWidth();
+        if (MapSize > (mapPane.getHeight())) {
+            MapSize = mapPane.getHeight();
+        }
+        y_offset = (mapPane.getHeight()) - MapSize;
+        x_offset = (mapPane.getWidth()) - MapSize;
+        double Dim = MapSize / (2 * Max);
+        for (int i = 0; i < roomCapacity; i++) {
+            PCIcon NewPc = new PCIcon(i / rowNumber, i % rowNumber, Dim, i % rowNumber * (roomCapacity / rowNumber) + i / rowNumber + 1, x_offset, y_offset);
+            pcArray[i] = NewPc;
+            if ((i % rowNumber * (roomCapacity / rowNumber) + i / rowNumber + 1) == indexPcSelected) {
+                NewPc.FillYellow();
+            }
+        }
+        return pcArray;
     }
 }

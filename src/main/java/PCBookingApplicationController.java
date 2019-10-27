@@ -53,7 +53,19 @@ public class PCBookingApplicationController extends Application {
         List<Room> rooms = DBManager.loadRooms(date, time);
         return rooms;
     }
-
+    
+    public static List<PC> loadAvaiablePCs(String room,String date,String time){
+        List<PC> PCs = DBManager.loadAvailablePCs(room, date, time);
+        return PCs;
+    }
+    
+    public static boolean reservePC(String user, String room, int pcnumb, String date, String time){
+        return DBManager.reservePC(user, room, pcnumb, date, time);
+    }
+    
+    public static boolean deleteReservation(String user, String room, int pcnumb, String date, String time) {
+        return DBManager.deleteReservation(user, room, pcnumb, date, time);
+    }
     /**
      * @param args the command line arguments
      */

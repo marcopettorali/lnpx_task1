@@ -128,7 +128,6 @@ public class DBManager {
             ps.setString(2, localDate);
 
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 reservations.add(new Reservation(rs.getString("Username"), rs.getString("RoomName"), Integer.toString(rs.getInt("PCNumber")), rs.getDate("Date").toString(), rs.getTime("StartTime").toString()));
             }
