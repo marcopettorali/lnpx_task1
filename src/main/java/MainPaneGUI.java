@@ -1,6 +1,4 @@
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.time.*;
 import java.time.format.*;
 import java.util.ArrayList;
@@ -47,7 +45,7 @@ public class MainPaneGUI extends HBox {
                 String hour = selectedReservation.getHour();
                 mapPane.getChildren().removeAll(pcArray);
                 if(PCBookingApplicationController.deleteReservation(User.username, room, PCnumber, date, hour)){
-                    ArrayList<Reservation> userReservations = DBManager.loadUserReservations(User.username);
+                    ArrayList<Reservation> userReservations = PCBookingApplicationController.loadReservation(User.username);
                     reservationsTable.setItems(userReservations);
                     reservationsTable.relaseSelection();
                 }else{
@@ -98,7 +96,7 @@ public class MainPaneGUI extends HBox {
                             pcArray = drawMap(rowNumber, roomCapacity, indexPcSelected);
                             mapPane.getChildren().addAll(pcArray);
                             
-                            ArrayList<Reservation> userReservations = DBManager.loadUserReservations(User.username);
+                            ArrayList<Reservation> userReservations = PCBookingApplicationController.loadReservation(User.username);
                             reservationsTable.setItems(userReservations);
                         }
 
@@ -197,7 +195,7 @@ public class MainPaneGUI extends HBox {
         myReservationsLabel.setText("My reservations:");
 
         VBox.setMargin(reservationsTable, new Insets(20.0, 0.0, 0.0, 0.0));
-        ArrayList<Reservation> userReservations = DBManager.loadUserReservations(User.username);
+        ArrayList<Reservation> userReservations = PCBookingApplicationController.loadReservation(User.username);
         reservationsTable.setItems(userReservations);
 
         errorLabel.setTextFill(Color.RED);

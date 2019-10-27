@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
 import javafx.scene.*;
@@ -65,6 +66,10 @@ public class PCBookingApplicationController extends Application {
     
     public static boolean deleteReservation(String user, String room, int pcnumb, String date, String time) {
         return DBManager.deleteReservation(user, room, pcnumb, date, time);
+    }
+    
+    public static ArrayList<Reservation> loadReservation(String user) {
+        return DBManager.loadUserReservations(user);
     }
     /**
      * @param args the command line arguments
