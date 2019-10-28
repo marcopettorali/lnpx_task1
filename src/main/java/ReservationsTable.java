@@ -24,10 +24,6 @@ public class ReservationsTable extends TableView<Reservation> {
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    /*
-    Questa funzione inserisce all'interno della TabellaPrenotazioni un array 
-        di reservation che dovrà essere riempito da DBManager.
-     */
     public void setItems(ArrayList<Reservation> ArrayReservation) {
         ReservationList = FXCollections.observableArrayList();
         for (int i = 0; i < ArrayReservation.size(); i++) {
