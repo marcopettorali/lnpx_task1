@@ -63,7 +63,7 @@ public class DBManager {
 
     static {
         try {
-            DBConnection = DriverManager.getConnection(DBMSFormat + "://" + DBMSAddress + ":" + DBMSPort + "/" + DBName + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", DBMSUsername, DBMSPassword);
+            DBConnection = DriverManager.getConnection(DBMSFormat + "://" + DBMSAddress + ":" + DBMSPort + "/" + DBName + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Rome", DBMSUsername, DBMSPassword);
         } catch (SQLException sqle) {
             System.out.println(sqle.getMessage());
         }
@@ -149,9 +149,9 @@ public class DBManager {
      * user
      * @param D it's the date for which the user asked a reservation
      * @param T it's the hour for which the user asked a reservation
-     * @return true if the reservation succeds
+     * @return 1 if the reservation succeds, 0 for generic errors, -2 if the PC is already occupied, -1 if the user already made a reservation
      */
-    public static boolean reservePC(String user, String rn, int pcnumb, String D, String T) {
+    public static int reservePC(String user, String rn, int pcnumb, String D, String T) {
         try (
                 PreparedStatement ps = DBConnection.prepareStatement(queryCreateReservation);
                 PreparedStatement ps1 = DBConnection.prepareStatement(queryControlReservations);) {
@@ -167,7 +167,7 @@ public class DBManager {
             }
 
             if (k > 0) {
-                return false;
+                return -1;
             }
 
             ps.setString(1, user);
@@ -178,14 +178,14 @@ public class DBManager {
 
             int ret = ps.executeUpdate();
             if (ret == 0) {
-                return false;
+                return -2;
             }
-            return true;
+            return 1;
 
         } catch (SQLException io) {
             System.err.println("An error has occured during the reservation of a PC ! \n");
         }
-        return true;
+        return 0;
     }
 
     /**
