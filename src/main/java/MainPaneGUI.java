@@ -44,11 +44,11 @@ public class MainPaneGUI extends HBox {
                 String date = selectedReservation.getDate();
                 String hour = selectedReservation.getHour();
                 mapPane.getChildren().removeAll(pcArray);
-                if(PCBookingApplicationController.deleteReservation(User.username, room, PCnumber, date, hour)){
-                    ArrayList<Reservation> userReservations = PCBookingApplicationController.loadReservation(User.username);
+                if (PCBookingApplicationController.deleteReservation(User.username, room, PCnumber, date, hour)) {
+                    ArrayList<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                     reservationsTable.setItems(userReservations);
                     reservationsTable.relaseSelection();
-                }else{
+                } else {
                     errorLabel.setText("There was an error during the deletion of the reservation.");
                 }
             } else {
@@ -90,14 +90,21 @@ public class MainPaneGUI extends HBox {
                     List<PC> avaiablePcList = PCBookingApplicationController.loadAvaiablePCs(roomName, dateString, time);
                     if (!avaiablePcList.isEmpty()) {
                         int indexPcSelected = avaiablePcList.get(0).getPCnumber();
-                        if (PCBookingApplicationController.reservePC(User.username, roomName, indexPcSelected, dateString, time)) {
+                        int ret = PCBookingApplicationController.reservePC(User.username, roomName, indexPcSelected, dateString, time);
+                        if (ret==1) {
                             selectedRoom.setAvailablePCs(avaiablePC - 1);
                             availableRoomsTable.updateRoomsInformation(index, selectedRoom);
                             pcArray = drawMap(rowNumber, roomCapacity, indexPcSelected);
                             mapPane.getChildren().addAll(pcArray);
-                            
-                            ArrayList<Reservation> userReservations = PCBookingApplicationController.loadReservation(User.username);
+
+                            ArrayList<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                             reservationsTable.setItems(userReservations);
+                        }else if(ret == -1){
+                            errorLabel.setText("You have already booked another PC for the specified date and time");
+                        }else if(ret == -2){
+                            errorLabel.setText("The selected PC is already occupied");
+                        }else{
+                            errorLabel.setText("An error occured during the reservation. Try again later.");
                         }
 
                     } else {
@@ -195,7 +202,7 @@ public class MainPaneGUI extends HBox {
         myReservationsLabel.setText("My reservations:");
 
         VBox.setMargin(reservationsTable, new Insets(20.0, 0.0, 0.0, 0.0));
-        ArrayList<Reservation> userReservations = PCBookingApplicationController.loadReservation(User.username);
+        ArrayList<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
         reservationsTable.setItems(userReservations);
 
         errorLabel.setTextFill(Color.RED);
