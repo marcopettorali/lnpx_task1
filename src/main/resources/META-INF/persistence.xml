@@ -3,6 +3,7 @@
   <persistence-unit name="lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>lnpx.PC</class>
+    <class>lnpx.Reservation</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pc_booking?serverTimezone=Europe/Rome"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

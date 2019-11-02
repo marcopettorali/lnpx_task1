@@ -114,11 +114,11 @@ public class DBManager {
      * @param username is the username of the user that logged in
      * @return it returns a list of all the reservations made by the user
      */
-    public static ArrayList<Reservation> loadUserReservations(String username) {
+    public static ArrayList<Reservation_bean> loadUserReservations(String username) {
         try (
                 PreparedStatement ps = DBConnection.prepareStatement(loadUserReservationsQuery);) {
 
-            ArrayList<Reservation> reservations = new ArrayList<>();
+            ArrayList<Reservation_bean> reservations = new ArrayList<>();
 
             LocalDate date = LocalDate.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -129,7 +129,7 @@ public class DBManager {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                reservations.add(new Reservation(rs.getString("Username"), rs.getString("RoomName"), Integer.toString(rs.getInt("PCNumber")), rs.getDate("Date").toString(), rs.getTime("StartTime").toString()));
+                reservations.add(new Reservation_bean(rs.getString("Username"), rs.getString("RoomName"), Integer.toString(rs.getInt("PCNumber")), rs.getDate("Date").toString(), rs.getTime("StartTime").toString()));
             }
 
             return reservations;

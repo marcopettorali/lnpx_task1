@@ -68,7 +68,7 @@ public class PCBookingApplicationController extends Application {
         return DBManager.deleteReservation(user, room, pcnumb, date, time);
     }
 
-    public static ArrayList<Reservation> loadUserReservations(String user) {
+    public static ArrayList<Reservation_bean> loadUserReservations(String user) {
         return DBManager.loadUserReservations(user);
     }
 
@@ -78,7 +78,7 @@ public class PCBookingApplicationController extends Application {
     public static void main(String[] args) {
         launch(args);
         /* Tentativo di inserimento di un PC*/
-        PC.createNewPc(0, "SI 1");
+        PC.createNewPc(1, "SI 1");
     }
 
 }
