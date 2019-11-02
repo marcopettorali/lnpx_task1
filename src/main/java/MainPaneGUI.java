@@ -87,7 +87,7 @@ public class MainPaneGUI extends HBox {
                     String localTime = l.toString();
                     String dateString = date.format(formatter);
 
-                    List<PC> avaiablePcList = PCBookingApplicationController.loadAvaiablePCs(roomName, dateString, time);
+                    List<PC_bean> avaiablePcList = PCBookingApplicationController.loadAvaiablePCs(roomName, dateString, time);
                     if (!avaiablePcList.isEmpty()) {
                         int indexPcSelected = avaiablePcList.get(0).getPCnumber();
                         int ret = PCBookingApplicationController.reservePC(User.username, roomName, indexPcSelected, dateString, time);
