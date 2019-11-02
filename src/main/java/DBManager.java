@@ -270,10 +270,10 @@ public class DBManager {
      * PCs
      * @return it returns a list of all the available PCs
      */
-    public static List<PC> loadAvailablePCs(String rn, String D, String T) {
+    public static List<PC_bean> loadAvailablePCs(String rn, String D, String T) {
         /* rn = RoomName, D = date, T=time */
 
-        List<PC> available = new ArrayList<>();
+        List<PC_bean> available = new ArrayList<>();
         try (
                 PreparedStatement ps = DBConnection.prepareStatement(queryAvailablePC);) {
             ps.setString(1, rn);
@@ -283,7 +283,7 @@ public class DBManager {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
 
-                PC p = new PC(rs.getInt("PCNumber"), rs.getString("RoomName"));
+                PC_bean p = new PC_bean(rs.getInt("PCNumber"), rs.getString("RoomName"));
                 available.add(p);
                 /* Creation of the PC bean and adding them into the returned list */
 
