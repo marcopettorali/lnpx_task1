@@ -23,10 +23,10 @@ public class JPAManager {
         emManager.persist(newPC);
         emManager.getTransaction().commit();
     } 
-    
+    /*
     public static List<Room> loadRooms(String date, String time){
         TypedQuery<Room> = emManager.createNativeQuery(JPAManager.queryAvailableRooms, Room.class).setParameter("time", time).setParameter("date", date);
         
         
-    }
+    }*/
 }

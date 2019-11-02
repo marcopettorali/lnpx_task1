@@ -1,9 +1,12 @@
 
-
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ *
+ * @author dcoll
+ */
 @Entity
 public class PC implements Serializable {
 
@@ -37,3 +40,4 @@ public class PC implements Serializable {
         return newPC;
     }
 }
+
