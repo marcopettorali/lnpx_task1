@@ -78,7 +78,7 @@ public class PCBookingApplicationController extends Application {
     public static void main(String[] args) {
         launch(args);
         /* Tentativo di inserimento di un PC*/
-        PC.createNewPc(1, "SI 1");
+        PC.createNewPc(0, "SI 1");
     }
 
 }
