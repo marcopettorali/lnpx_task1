@@ -38,11 +38,12 @@ public class PCBookingApplicationController extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        LDBManager.InsertTemporary();
         loadLoginPane();
     }
 
     public static boolean login(String username, String password) {
-        if (DBManager.checkLogin(username, password)) {
+        if (LDBManager.checkLogin(username, password)) {
             loadMainPane();
             return true;
         } else {
