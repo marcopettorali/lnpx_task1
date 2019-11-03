@@ -12,16 +12,24 @@ public class PC implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name="PC Number")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="PC_Id")
+    private long pcId;
+
+    @Column(name="PC_Number")
     private int pcNumber;
-    @Id
+    
     @ManyToOne
-    @JoinColumn(name = "Room Name")
+    @JoinColumn(name = "Room_Name")
     private Room pcRoom;
 
     @OneToMany(mappedBy="pcBooked")
     private Set<Reservation> reservations;
 
+    public long getPcId() {
+        return pcId;
+    }
+    
     public int getPcNumber() {
         return pcNumber;
     }

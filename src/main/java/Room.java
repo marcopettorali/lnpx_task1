@@ -9,13 +9,13 @@ public class Room implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name="Room Name")
+    @Column(name="Room_Name")
     private String roomName;
     
     @Column(name="Capacity")
     private int capacity;
     
-    @Column(name="Rows Number")
+    @Column(name="Rows_Number")
     private int rowsNumber;
     
     @OneToMany(mappedBy="pcRoom")

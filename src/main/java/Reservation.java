@@ -8,17 +8,13 @@ public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
-    @Column(name="Start Time")
+    @Column(name="Start_Time")
     private String startTime;
     @Id
     @Column(name="Date")
     private String bookingDate;
     @Id
     @ManyToOne
-    @JoinColumns({
-       @JoinColumn(name = "pcBooked", referencedColumnName = "PC Number"),
-       @JoinColumn(name = "pcBooked", referencedColumnName = "Room Name")
-    })
     private PC pcBooked; 
     
     //@ManyToOne
