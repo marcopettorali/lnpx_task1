@@ -74,4 +74,14 @@ public class LDBManager {
             return cont>0;
        }
        
+       /**
+        * Temporary insert of Users in the key-value DB
+        */
+       public static void InsertTemporary()
+       {
+            LDBManager.insertUser("r.xefraj", "r.xefraj", "Riccardo", "Xefraj", 547897);
+            LDBManager.insertUser("d.lorenzoni2","d.lorenzoni2","Dario","Lorenzoni",546619);
+            LDBManager.insertUser("m.pettorali","m.pettorali","Marco","Pettorali",555444);
+            LDBManager.insertUser("r.nocerino","r.nocerino","Raffaele","Nocerino",530199);                    
+       }
     }
