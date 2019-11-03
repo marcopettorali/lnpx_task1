@@ -19,12 +19,12 @@ public class JPAManager {
             + "			         from booking b1"
             + "                             where b1.StartTime= :time and b1.Date= :date);";
     
-    private static final String loadUserReservationsQuery = "SELECT * FROM booking WHERE Username = :name AND Date >= :date";
+    private static final String loadUserReservationsQuery = "SELECT b FROM booking b WHERE Username = :name AND Date >= :date";
 
     private static final String queryControlReservations = ""
             + "select count(*) as NumPrenotazioni "
             + "from booking b "
-            + "where b.username=? and b.StartTime=? and b.date=?;";
+            + "where b.username=:name and b.StartTime=:time and b.date=:date;";
     
     private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
     private static final EntityManager emManager = emFactory.createEntityManager();
@@ -35,6 +35,14 @@ public class JPAManager {
         emManager.getTransaction().commit();
         emManager.close();
     } 
+    
+    public static void createRoom(Room newRoom){
+        emManager.getTransaction().begin();
+        emManager.persist(newRoom);
+        emManager.getTransaction().commit();
+        emManager.close();
+    } 
+    
     /*
     public static List<Room> loadRooms(String date, String time){
         TypedQuery<Room> = emManager.createNativeQuery(JPAManager.queryAvailableRooms, Room.class).setParameter("time", time).setParameter("date", date);
@@ -59,21 +67,52 @@ public class JPAManager {
     }
     
     
-    public static int reservePC(Reservation R){
+    public static boolean reservePC(Reservation R){
         
+        Query q=emManager.createQuery(queryControlReservations);
         
+        String user=R.getUsername();
+        String rTime=R.getStartTime();
+        String rDate=R.getBookingDate();
         
-    }
-    
-    public static int deleteReservation(Reservation r){
+        q.setParameter("name",user);
+        q.setParameter("time",rTime);
+        q.setParameter("date",rDate);
+        
+        int numbRes=(int)q.getSingleResult();
+        if(numbRes > 0){
+            
+            return false;
+            
+        }
         
         emManager.getTransaction().begin();
+        try{
+             emManager.persist(R);
+            }
+        catch(EntityExistsException eee){
+                System.out.println("The entity alredy exists !");
+                return false;
+            }
+        return true;
+              
+    }
+    
+    public static boolean deleteReservation(Reservation r){
+       
+       try{ 
+        emManager.getTransaction().begin();
         emManager.remove(r);
-        
+        emManager.getTransaction().commit();
         /* If the emManager.remove(r) removes nothing because it wants a persisted object
           we have to previously find the target object and after remove it
         */
-        
+       }catch(IllegalArgumentException iae){
+           
+           System.out.println("A detached object is passed as parameter instead of persisted Object !");
+           
+       }
+       return true; 
         
     }
     
