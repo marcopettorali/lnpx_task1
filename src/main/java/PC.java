@@ -1,46 +1,57 @@
 
 import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 /**
  *
- * @author dcoll
+ * @author Dario
  */
 @Entity
 public class PC implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @Column(name="PC Number")
     private int pcNumber;
     @Id
-    private String roomName;
+    @ManyToOne
+    @JoinColumn(name = "Room Name")
+    private Room pcRoom;
 
     @OneToMany(mappedBy="pcBooked")
     private Set<Reservation> reservations;
-    
-    public void setPcNumber(int pcNumber) {
-        this.pcNumber = pcNumber;
-    }
-
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
-    }
 
     public int getPcNumber() {
         return pcNumber;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public Room getPcRoom() {
+        return pcRoom;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setPcNumber(int pcNumber) {
+        this.pcNumber = pcNumber;
+    }
+
+    public void setPcRoom(Room pcRoom) {
+        this.pcRoom = pcRoom;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
     }
     
-    public static PC createNewPc(int newPcNumber,String newRoomName){
+
+    
+    public static PC createNewPc(int newPcNumber,Room newpcRoom){
         PC newPC  = new PC();
         newPC.setPcNumber(newPcNumber);
-        newPC.setRoomName(newRoomName);
+        newPC.setPcRoom(newpcRoom);
         JPAManager.createPC(newPC);
         return newPC;
     }

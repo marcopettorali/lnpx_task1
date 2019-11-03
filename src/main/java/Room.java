@@ -1,37 +1,65 @@
 
-import javafx.beans.property.*;
+import java.io.Serializable;
+import java.util.Set;
+import javax.persistence.*;
 
-public class Room {
-    private SimpleStringProperty roomName;
-    private SimpleIntegerProperty capacity;
-    private SimpleIntegerProperty availablePCs;
-    private SimpleIntegerProperty rowNumber;
+
+@Entity
+public class Room implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Column(name="Room Name")
+    private String roomName;
     
-    public Room(String roomName, int capacity, int availablePCs, int rowNumber){
-        this.roomName = new SimpleStringProperty(roomName);
-        this.capacity = new SimpleIntegerProperty(capacity);
-        this.availablePCs = new SimpleIntegerProperty(availablePCs);
-        this.rowNumber = new SimpleIntegerProperty(rowNumber);
-    }
+    @Column(name="Capacity")
+    private int capacity;
     
+    @Column(name="Rows Number")
+    private int rowsNumber;
+    
+    @OneToMany(mappedBy="pcRoom")
+    private Set<PC> PCs;
+
     public String getRoomName() {
-        return roomName.get();
+        return roomName;
     }
 
     public int getCapacity() {
-        return capacity.get();
+        return capacity;
     }
 
-    public int getAvailablePCs() {
-        return availablePCs.get();
-    }
-    
-    public int getRowNumber() {
-        return rowNumber.get();
+    public int getRowsNumber() {
+        return rowsNumber;
     }
 
-    public void setAvailablePCs(int availablePCs) {
-        this.availablePCs = new SimpleIntegerProperty(availablePCs);
+
+    public Set<PC> getPCs() {
+        return PCs;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setRowsNumber(int rowsNumber) {
+        this.rowsNumber = rowsNumber;
+    }
+
+    public void setPCs(Set<PC> PCs) {
+        this.PCs = PCs;
     }
     
+    public static Room createNewRoom(String newRoomName,int newRoomCapacity,int newRowsNumber){
+        Room newRoom  = new Room();
+        newRoom.setRoomName(newRoomName);
+        newRoom.setCapacity(newRoomCapacity);
+        newRoom.setRowsNumber(newRowsNumber);
+        JPAManager.createRoom(newRoom);
+        return newRoom;
+    }
 }

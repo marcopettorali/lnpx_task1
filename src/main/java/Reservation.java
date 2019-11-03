@@ -15,12 +15,32 @@ public class Reservation implements Serializable {
     private String bookingDate;
     @Id
     @ManyToOne
+    @JoinColumns({
+       @JoinColumn(name = "pcBooked", referencedColumnName = "PC Number"),
+       @JoinColumn(name = "pcBooked", referencedColumnName = "Room Name")
+    })
     private PC pcBooked; 
     
     //@ManyToOne
     //@JoinColumn
     @Column(name="Username")
     private String username;
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public PC getPcBooked() {
+        return pcBooked;
+    }
+
+    public String getUsername() {
+        return username;
+    }
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
@@ -30,12 +50,13 @@ public class Reservation implements Serializable {
         this.bookingDate = bookingDate;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public void setPcBooked(PC pcBooked) {
+        this.pcBooked = pcBooked;
     }
 
-    public String getBookingDate() {
-        return bookingDate;
-    }  
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
     
 }
