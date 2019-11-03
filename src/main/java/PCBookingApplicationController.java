@@ -51,8 +51,8 @@ public class PCBookingApplicationController extends Application {
         }
     }
 
-    public static List<Room> loadRooms(String date, String time) {
-        List<Room> rooms = DBManager.loadRooms(date, time);
+    public static List<Room_bean> loadRooms(String date, String time) {
+        List<Room_bean> rooms = DBManager.loadRooms(date, time);
         return rooms;
     }
 
@@ -79,7 +79,9 @@ public class PCBookingApplicationController extends Application {
     public static void main(String[] args) {
         launch(args);
         /* Tentativo di inserimento di un PC*/
-        PC.createNewPc(0, "SI 1");
+        Room r = Room.createNewRoom("SI 1", 15, 3);
+        PC.createNewPc(0, r);
+        PC.createNewPc(1, r);
     }
 
 }

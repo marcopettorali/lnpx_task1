@@ -67,7 +67,7 @@ public class MainPaneGUI extends HBox {
                 mapPane.getChildren().removeAll(pcArray);
                 pcArray = null;
             }
-            Room selectedRoom = availableRoomsTable.getSelected();
+            Room_bean selectedRoom = availableRoomsTable.getSelected();
             if (selectedRoom != null) {
                 String roomName = selectedRoom.getRoomName();
                 int roomCapacity = selectedRoom.getCapacity();

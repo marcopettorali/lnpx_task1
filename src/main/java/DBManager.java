@@ -232,10 +232,10 @@ public class DBManager {
      * @param T it's the hour in which we're intrested to check the rooms' state
      * @return it returns a list of all the rooms
      */
-    public static List<Room> loadRooms(String D, String T) {
+    public static List<Room_bean> loadRooms(String D, String T) {
         /* D = Date , T = StartTime */
 
-        List<Room> available = new ArrayList<>();
+        List<Room_bean> available = new ArrayList<>();
         try (
                 PreparedStatement ps = DBConnection.prepareStatement(queryAvailableRooms);) {
 
@@ -247,7 +247,7 @@ public class DBManager {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
 
-                Room r = new Room(rs.getString("RoomName"), rs.getInt("Capacity"), rs.getInt("Available"), rs.getInt("RowNumber"));
+                Room_bean r = new Room_bean(rs.getString("RoomName"), rs.getInt("Capacity"), rs.getInt("Available"), rs.getInt("RowNumber"));
                 available.add(r);
                 /* Creation of the Room Bean and adding them into the returned list*/
 
