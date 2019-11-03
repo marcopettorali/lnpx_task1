@@ -1,7 +1,9 @@
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -16,6 +18,9 @@ public class PC implements Serializable {
     @Id
     private String roomName;
 
+    @OneToMany(mappedBy="pcBooked")
+    private Set<Reservation> reservations;
+    
     public void setPcNumber(int pcNumber) {
         this.pcNumber = pcNumber;
     }
