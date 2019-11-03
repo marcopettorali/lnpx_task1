@@ -1,3 +1,5 @@
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 import javax.persistence.*;
 
@@ -17,6 +19,13 @@ public class JPAManager {
             + "			         from booking b1"
             + "                             where b1.StartTime= :time and b1.Date= :date);";
     
+    private static final String loadUserReservationsQuery = "SELECT * FROM booking WHERE Username = :name AND Date >= :date";
+
+    private static final String queryControlReservations = ""
+            + "select count(*) as NumPrenotazioni "
+            + "from booking b "
+            + "where b.username=? and b.StartTime=? and b.date=?;";
+    
     private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
     private static final EntityManager emManager = emFactory.createEntityManager();
     
@@ -34,7 +43,19 @@ public class JPAManager {
     }*/
     
     public static List<Reservation> loadUserReservations(String username){
+        List<Reservation> ret=null;        
+        Query q=emManager.createQuery(loadUserReservationsQuery,Reservation.class);
         
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String localDate = date.format(formatter);
+        
+        q.setParameter("name",username);
+        q.setParameter("date",localDate);
+        
+        ret=q.getResultList();
+        return ret;
+     
     }
     
     
@@ -50,11 +71,8 @@ public class JPAManager {
         emManager.remove(r);
         
         /* If the emManager.remove(r) removes nothing because it wants a persisted object
-          we have to previously find the target object and after remove ti
-        
-        
-        
-        
+          we have to previously find the target object and after remove it
+        */
         
         
     }
