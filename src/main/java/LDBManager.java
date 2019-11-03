@@ -46,12 +46,9 @@ public class LDBManager {
          */
        public static boolean checkLogin(String uname, String pword)
         {
-            DBIterator keyIterator=userDB.iterator();
-            keyIterator.seek(bytes("user:"+uname.hashCode()+userDBFormat[1]));
-            while(keyIterator.hasNext())
-            {
-                            return true;
-            }
+            String s=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[1])));
+            if(s!=null)
+                return s.compareTo(pword)==0;
             return false;
         }
        
