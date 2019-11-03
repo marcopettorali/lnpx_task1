@@ -19,6 +19,7 @@ public class JPAManager {
     
     private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
     private static final EntityManager emManager = emFactory.createEntityManager();
+    
     public static void createPC(PC newPC){
         emManager.getTransaction().begin();
         emManager.persist(newPC);
@@ -31,4 +32,31 @@ public class JPAManager {
         
         
     }*/
+    
+    public static List<Reservation> loadUserReservations(String username){
+        
+    }
+    
+    
+    public static int reservePC(Reservation R){
+        
+        
+        
+    }
+    
+    public static int deleteReservation(Reservation r){
+        
+        emManager.getTransaction().begin();
+        emManager.remove(r);
+        
+        /* If the emManager.remove(r) removes nothing because it wants a persisted object
+          we have to previously find the target object and after remove ti
+        
+        
+        
+        
+        
+        
+    }
+    
 }
