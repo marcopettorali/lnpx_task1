@@ -13,14 +13,14 @@ public class ReservationsTable extends TableView<Reservation> {
         TableColumn Username = new TableColumn("Username");
         Username.setCellValueFactory(new PropertyValueFactory<>("username"));
         TableColumn Room = new TableColumn("Room");
-        Room.setCellValueFactory(new PropertyValueFactory<>("room"));
+        Room.setCellValueFactory(new PropertyValueFactory<>("roomName"));
         TableColumn Day = new TableColumn("PC");
-        Day.setCellValueFactory(new PropertyValueFactory<>("PCnumber"));
+        Day.setCellValueFactory(new PropertyValueFactory<>("pcBooked"));
         TableColumn Hour = new TableColumn("Date");
-        Hour.setCellValueFactory(new PropertyValueFactory<>("date"));
+        Hour.setCellValueFactory(new PropertyValueFactory<>("bookingDate"));
         TableColumn PC = new TableColumn("Hour");
-        PC.setCellValueFactory(new PropertyValueFactory<>("hour"));
-        this.getColumns().addAll(Room, Day, Hour, PC);
+        PC.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        this.getColumns().addAll(Day, Hour, PC);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
