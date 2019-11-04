@@ -19,7 +19,7 @@ public class JPAManager {
             + "			         from booking b1"
             + "                             where b1.StartTime= :time and b1.Date= :date);";
     
-    private static final String loadUserReservationsQuery = "SELECT b FROM booking b WHERE Username = :name AND Date >= :date";
+    private static final String loadUserReservationsQuery = "SELECT b FROM Reservation b WHERE username = :name AND bookingDate >= :date";
 
     private static final String queryControlReservations = ""
             + "select count(*) as NumPrenotazioni "

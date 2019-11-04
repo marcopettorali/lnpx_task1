@@ -4,9 +4,9 @@ import javafx.collections.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class ReservationsTable extends TableView<Reservation_bean> {
+public class ReservationsTable extends TableView<Reservation> {
 
-    private ObservableList<Reservation_bean> ReservationList;
+    private ObservableList<Reservation> ReservationList;
 
     ReservationsTable() {
         super();
@@ -24,16 +24,14 @@ public class ReservationsTable extends TableView<Reservation_bean> {
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public void setItems(ArrayList<Reservation_bean> ArrayReservation) {
+    public void setItems(List<Reservation> ArrayReservation) {
         ReservationList = FXCollections.observableArrayList();
-        for (int i = 0; i < ArrayReservation.size(); i++) {
-            ReservationList.add(ArrayReservation.get(i));
-        }
+        ReservationList.addAll(ArrayReservation);
         this.setItems(ReservationList);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public Reservation_bean getSelected() {
+    public Reservation getSelected() {
         return this.getSelectionModel().getSelectedItem();
     }
 

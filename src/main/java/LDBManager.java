@@ -52,6 +52,16 @@ public class LDBManager {
             return false;
         }
        
+       public static void loadUserInformation(String uname)
+       {
+           DBIterator keyIterator=userDB.iterator();
+           keyIterator.seek(bytes("user:"+uname.hashCode()));
+           User.username=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[0])));
+           User.password=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[1])));
+           User.firstName=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[2])));
+           User.lastName=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[3])));
+          // User.matriculationNumber=byteArrayToInt(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[3])));
+       }
        /**
         * This function deletes from the Database all the informations of the specified user
         * @param uname

@@ -44,6 +44,7 @@ public class PCBookingApplicationController extends Application {
 
     public static boolean login(String username, String password) {
         if (LDBManager.checkLogin(username, password)) {
+            LDBManager.loadUserInformation(username);
             loadMainPane();
             return true;
         } else {
@@ -69,8 +70,8 @@ public class PCBookingApplicationController extends Application {
         return DBManager.deleteReservation(user, room, pcnumb, date, time);
     }
 
-    public static ArrayList<Reservation_bean> loadUserReservations(String user) {
-        return DBManager.loadUserReservations(user);
+    public static List<Reservation> loadUserReservations(String user) {
+        return JPAManager.loadUserReservations(user);
     }
 
     /**
@@ -78,22 +79,6 @@ public class PCBookingApplicationController extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-        /* Tentativo di inserimento di un PC*/
-        JPAManager.JPAStart();
-        Room r1 = Room.createNewRoom("SI 1", 15, 3);
-        Room r2 = Room.createNewRoom("SI 2", 20, 4);
-        Room r3 = Room.createNewRoom("SI 3", 12, 3);
-        Room r4 = Room.createNewRoom("SI 4", 25, 5);
-        //JPAManager.JPAStart();
-        for(int i = 0; i < 15 ; i++)
-            PC.createNewPc(i, r1);
-        for(int i = 0; i < 20 ; i++)
-            PC.createNewPc(i, r2);
-        for(int i = 0; i < 12 ; i++)
-            PC.createNewPc(i, r3);
-        for(int i = 0; i < 25 ; i++)
-            PC.createNewPc(i, r4);
-        JPAManager.JPAStop();
     }
 
 }

@@ -37,15 +37,15 @@ public class MainPaneGUI extends HBox {
         deleteReservationButton.setOnAction(e -> {
             errorLabel.setText("");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            Reservation_bean selectedReservation = reservationsTable.getSelected();
+            Reservation selectedReservation = reservationsTable.getSelected();
             if (selectedReservation != null) {
-                String room = selectedReservation.getRoom();
-                int PCnumber = Integer.parseInt(selectedReservation.getPCnumber());
-                String date = selectedReservation.getDate();
-                String hour = selectedReservation.getHour();
+                String room = selectedReservation.getPcBooked().getPcRoom().getRoomName();
+                int PCnumber = selectedReservation.getPcBooked().getPcNumber();
+                String date = selectedReservation.getBookingDate();
+                String hour = selectedReservation.getStartTime();
                 mapPane.getChildren().removeAll(pcArray);
                 if (PCBookingApplicationController.deleteReservation(User.username, room, PCnumber, date, hour)) {
-                    ArrayList<Reservation_bean> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
+                    List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                     reservationsTable.setItems(userReservations);
                     reservationsTable.relaseSelection();
                 } else {
@@ -97,7 +97,7 @@ public class MainPaneGUI extends HBox {
                             pcArray = drawMap(rowNumber, roomCapacity, indexPcSelected);
                             mapPane.getChildren().addAll(pcArray);
 
-                            ArrayList<Reservation_bean> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
+                            List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                             reservationsTable.setItems(userReservations);
                         }else if(ret == -1){
                             errorLabel.setText("You have already booked another PC for the specified date and time");
@@ -202,7 +202,7 @@ public class MainPaneGUI extends HBox {
         myReservationsLabel.setText("My reservations:");
 
         VBox.setMargin(reservationsTable, new Insets(20.0, 0.0, 0.0, 0.0));
-        ArrayList<Reservation_bean> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
+        List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
         reservationsTable.setItems(userReservations);
 
         errorLabel.setTextFill(Color.RED);
