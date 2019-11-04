@@ -86,13 +86,13 @@ public class PCBookingApplicationController extends Application {
         Room r4 = Room.createNewRoom("SI 4", 25, 5);
         //JPAManager.JPAStart();
         for(int i = 0; i < 15 ; i++)
-            PC.createNewPc(0, r1);
+            PC.createNewPc(i, r1);
         for(int i = 0; i < 20 ; i++)
-            PC.createNewPc(0, r2);
+            PC.createNewPc(i, r2);
         for(int i = 0; i < 12 ; i++)
-            PC.createNewPc(0, r3);
+            PC.createNewPc(i, r3);
         for(int i = 0; i < 25 ; i++)
-            PC.createNewPc(0, r4);
+            PC.createNewPc(i, r4);
         JPAManager.JPAStop();
     }
 
