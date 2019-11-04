@@ -26,16 +26,21 @@ public class LDBManager {
          * @param fName
          * @param lName
          * @param mNumber 
+         * @return true if success false if this username still exists 
          */
-        public static void insertUser(String uname,String pword,String fName,String lName, int mNumber)
+        public static boolean insertUser(String uname,String pword,String fName,String lName, int mNumber)
         {
             String key="user:"+uname.hashCode();
             String[] LDBInfo={uname,pword,fName,lName,String.valueOf(mNumber)};
+            String s=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[0])));
+            if(s!=null)
+                return false;
             for(int i=0;i<5;i++)
             {
                 String upKey=key+userDBFormat[i];
                 userDB.put(bytes(upKey), bytes(LDBInfo[i]));
             }
+            return true;
         }
         
         /**
@@ -52,15 +57,20 @@ public class LDBManager {
             return false;
         }
        
+       /**
+        * This function insert in the Object users all the informations stored in
+        * the LevelDB Database
+        * @param uname 
+        */
+       
        public static void loadUserInformation(String uname)
        {
-           DBIterator keyIterator=userDB.iterator();
-           keyIterator.seek(bytes("user:"+uname.hashCode()));
            User.username=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[0])));
            User.password=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[1])));
            User.firstName=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[2])));
            User.lastName=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[3])));
-          // User.matriculationNumber=byteArrayToInt(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[3])));
+           byte[] MNumb=userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[4]));
+           User.matriculationNumber=MNumb[0];
        }
        /**
         * This function deletes from the Database all the informations of the specified user
