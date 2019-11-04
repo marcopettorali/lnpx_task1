@@ -34,18 +34,17 @@ public class JPAManager {
     }
     
     public static void JPAStop(){
+        emManager.getTransaction().commit();
         emManager.close();
     }
     
     
     public static void createPC(PC newPC){
         emManager.persist(newPC);
-        emManager.getTransaction().commit();
     } 
     
     public static void createRoom(Room newRoom){
         emManager.persist(newRoom);
-        emManager.getTransaction().commit();
     } 
     
     /*

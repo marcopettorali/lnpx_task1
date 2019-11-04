@@ -80,11 +80,19 @@ public class PCBookingApplicationController extends Application {
         launch(args);
         /* Tentativo di inserimento di un PC*/
         JPAManager.JPAStart();
-        Room r = Room.createNewRoom("SI 1", 15, 3);
-        JPAManager.JPAStart();
-        PC.createNewPc(0, r);
-        JPAManager.JPAStart();
-        PC.createNewPc(1, r);
+        Room r1 = Room.createNewRoom("SI 1", 15, 3);
+        Room r2 = Room.createNewRoom("SI 2", 20, 4);
+        Room r3 = Room.createNewRoom("SI 3", 12, 3);
+        Room r4 = Room.createNewRoom("SI 4", 25, 5);
+        //JPAManager.JPAStart();
+        for(int i = 0; i < 15 ; i++)
+            PC.createNewPc(0, r1);
+        for(int i = 0; i < 20 ; i++)
+            PC.createNewPc(0, r2);
+        for(int i = 0; i < 12 ; i++)
+            PC.createNewPc(0, r3);
+        for(int i = 0; i < 25 ; i++)
+            PC.createNewPc(0, r4);
         JPAManager.JPAStop();
     }
 
