@@ -67,11 +67,11 @@ public class MainPaneGUI extends HBox {
                 mapPane.getChildren().removeAll(pcArray);
                 pcArray = null;
             }
-            Room_bean selectedRoom = availableRoomsTable.getSelected();
+            Room selectedRoom = availableRoomsTable.getSelected();
             if (selectedRoom != null) {
                 String roomName = selectedRoom.getRoomName();
                 int roomCapacity = selectedRoom.getCapacity();
-                int rowNumber = selectedRoom.getRowNumber();
+                int rowNumber = selectedRoom.getRowsNumber();
                 int avaiablePC = selectedRoom.getAvailablePCs();
                 int index = availableRoomsTable.getSelectionModel().getFocusedIndex();
                 availableRoomsTable.relaseSelection();
@@ -87,9 +87,9 @@ public class MainPaneGUI extends HBox {
                     String localTime = l.toString();
                     String dateString = date.format(formatter);
 
-                    List<PC_bean> avaiablePcList = PCBookingApplicationController.loadAvaiablePCs(roomName, dateString, time);
+                    List<PC> avaiablePcList = PCBookingApplicationController.loadAvaiablePCs(roomName, dateString, time);
                     if (!avaiablePcList.isEmpty()) {
-                        int indexPcSelected = avaiablePcList.get(0).getPCnumber();
+                        int indexPcSelected = avaiablePcList.get(0).getPcNumber();
                         int ret = PCBookingApplicationController.reservePC(User.username, roomName, indexPcSelected, dateString, time);
                         if (ret==1) {
                             selectedRoom.setAvailablePCs(avaiablePC - 1);

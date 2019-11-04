@@ -8,10 +8,10 @@ public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
-    @Column(name="Start_Time")
+    @Column(name="startTime")
     private String startTime;
     @Id
-    @Column(name="Date")
+    @Column(name="bookingDate")
     private String bookingDate;
     @Id
     @ManyToOne
@@ -19,7 +19,7 @@ public class Reservation implements Serializable {
     
     //@ManyToOne
     //@JoinColumn
-    @Column(name="Username")
+    @Column(name="username")
     private String username;
 
     public String getStartTime() {
@@ -53,6 +53,5 @@ public class Reservation implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-    
-    
+     
 }

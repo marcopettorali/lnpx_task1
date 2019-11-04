@@ -13,14 +13,14 @@ public class PC implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="PC_Id")
+    @Column(name="pcId")
     private long pcId;
 
-    @Column(name="PC_Number")
+    @Column(name="pcNumber")
     private int pcNumber;
     
     @ManyToOne
-    @JoinColumn(name = "Room_Name")
+    @JoinColumn(name = "pcRoom")
     private Room pcRoom;
 
     @OneToMany(mappedBy="pcBooked")

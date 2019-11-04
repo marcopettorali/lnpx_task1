@@ -4,9 +4,9 @@ import javafx.collections.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class AvailableRoomsTable extends TableView<Room_bean> {
+public class AvailableRoomsTable extends TableView<Room> {
 
-    private ObservableList<Room_bean> ObListRoom;
+    private ObservableList<Room> ObListRoom;
 
     AvailableRoomsTable() {
         super();
@@ -20,14 +20,14 @@ public class AvailableRoomsTable extends TableView<Room_bean> {
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public void setItems(List<Room_bean> ArrayRooms) {
+    public void setItems(List<Room> ArrayRooms) {
         ObListRoom = FXCollections.observableArrayList();
         ObListRoom.addAll(ArrayRooms);
         this.setItems(ObListRoom);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public Room_bean getSelected() {
+    public Room getSelected() {
         return this.getSelectionModel().getSelectedItem();
     }
 
@@ -35,7 +35,7 @@ public class AvailableRoomsTable extends TableView<Room_bean> {
         this.getSelectionModel().clearSelection();
     }
 
-    public void updateRoomsInformation(int row, Room_bean NewRoomInformations) {
+    public void updateRoomsInformation(int row, Room NewRoomInformations) {
         ObListRoom.set(row, NewRoomInformations);
         this.setItems(ObListRoom);
     }
