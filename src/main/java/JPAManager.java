@@ -87,7 +87,7 @@ public class JPAManager {
 
     }
 
-    public static boolean reservePC(Reservation R) {
+    public static int reservePC(Reservation R) {
 
         Query q = emManager.createQuery(controlReservationQuery);
 
@@ -102,7 +102,7 @@ public class JPAManager {
         int numbRes = (int) q.getSingleResult();
         if (numbRes > 0) {
 
-            return false;
+            return 0;
 
         }
 
@@ -111,9 +111,9 @@ public class JPAManager {
             emManager.persist(R);
         } catch (EntityExistsException eee) {
             System.out.println("The entity alredy exists !");
-            return false;
+            return -1;
         }
-        return true;
+        return 1;
 
     }
 

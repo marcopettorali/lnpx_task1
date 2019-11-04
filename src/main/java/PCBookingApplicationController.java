@@ -64,11 +64,17 @@ public class PCBookingApplicationController extends Application {
     }
 
     public static int reservePC(String user, String room, int pcnumb, String date, String time) {
-        return DBManager.reservePC(user, room, pcnumb, date, time);
+        Reservation res = new Reservation();
+        res.setBookingDate(date);
+        res.setPcBooked(pcBooked);
+        res.setStartTime(time);
+        res.setUsername(user);
+        
+        return JPAManager.reservePC(res);
     }
 
     public static boolean deleteReservation(String user, String room, int pcnumb, String date, String time) {
-        return DBManager.deleteReservation(user, room, pcnumb, date, time);
+        return JPAManager.deleteReservation(user, room, pcnumb, date, time);
     }
 
     public static List<Reservation> loadUserReservations(String user) {
