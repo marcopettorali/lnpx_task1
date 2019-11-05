@@ -58,7 +58,7 @@ public class PCBookingApplicationController extends Application {
         return rooms;
     }
 
-    public static List<PC> loadAvaiablePCs(String room, String date, String time) {
+    public static List<PC> loadAvailablePCs(String room, String date, String time) {
         List<PC> PCs = JPAManager.loadAvailablePCs(room, date, time);
         return PCs;
     }
@@ -66,6 +66,7 @@ public class PCBookingApplicationController extends Application {
     public static int reservePC(String user, String room, int pcnumb, String date, String time) {
         Reservation res = new Reservation();
         res.setBookingDate(date);
+        PC pcBooked=JPAManager.findPc(pcnumb);
         res.setPcBooked(pcBooked);
         res.setStartTime(time);
         res.setUsername(user);
@@ -73,8 +74,8 @@ public class PCBookingApplicationController extends Application {
         return JPAManager.reservePC(res);
     }
 
-    public static boolean deleteReservation(String user, String room, int pcnumb, String date, String time) {
-        return JPAManager.deleteReservation(user, room, pcnumb, date, time);
+    public static boolean deleteReservation(Reservation r) {
+        return JPAManager.deleteReservation(r);
     }
 
     public static List<Reservation> loadUserReservations(String user) {
@@ -82,6 +83,9 @@ public class PCBookingApplicationController extends Application {
     }
 
     public static void buildTestDatabase() {
+        
+        JPAManager.JPAStart();
+        
         //build Rooms
         Room roomSI1 = Room.createNewRoom("SI1", 6, 2);
         Room roomSI2 = Room.createNewRoom("SI2", 6, 3);
@@ -115,48 +119,58 @@ public class PCBookingApplicationController extends Application {
         res0.setBookingDate("2019-12-01");
         res0.setStartTime("12:30");
         res0.setUsername("m.pettorali");
+        JPAManager.reservePC(res0);
         
         Reservation res1 = new Reservation();
         res1.setPcBooked(pc1SI1);
         res1.setBookingDate("2019-12-01");
         res1.setStartTime("12:30");
-        res1.setUsername("d.lorenzoni");     
+        res1.setUsername("d.lorenzoni");
+        JPAManager.reservePC(res1);
         
         Reservation res2 = new Reservation();
         res2.setPcBooked(pc2SI1);
         res2.setBookingDate("2019-12-01");
         res2.setStartTime("12:30");
         res2.setUsername("r.xefraj");     
+        JPAManager.reservePC(res2);
         
         Reservation res3 = new Reservation();
         res3.setPcBooked(pc0SI1);
         res3.setBookingDate("2019-12-02");
         res3.setStartTime("10:30");
         res3.setUsername("r.nocerino");     
+        JPAManager.reservePC(res3);
         
         Reservation res4 = new Reservation();
         res4.setPcBooked(pc0SI2);
         res4.setBookingDate("2019-12-02");
         res4.setStartTime("10:30");
-        res4.setUsername("m.pettorali");     
+        res4.setUsername("m.pettorali");
+        JPAManager.reservePC(res4);
        
         Reservation res5 = new Reservation();
         res5.setPcBooked(pc1SI2);
         res5.setBookingDate("2019-12-02");
         res5.setStartTime("10:30");
-        res5.setUsername("r.nocerino");     
+        res5.setUsername("r.nocerino");
+        JPAManager.reservePC(res5);
         
         Reservation res6 = new Reservation();
         res6.setPcBooked(pc1SI2);
         res6.setBookingDate("2019-12-02");
         res6.setStartTime("11:30");
-        res6.setUsername("d.lorenzoni");     
+        res6.setUsername("d.lorenzoni");
+        JPAManager.reservePC(res6);
         
         Reservation res7 = new Reservation();
-        res6.setPcBooked(pc3SI3);
-        res6.setBookingDate("2019-12-15");
-        res6.setStartTime("17:30");
-        res6.setUsername("r.xefraj");     
+        res7.setPcBooked(pc3SI3);
+        res7.setBookingDate("2019-12-15");
+        res7.setStartTime("17:30");
+        res7.setUsername("r.xefraj");  
+        JPAManager.reservePC(res7);
+        
+        JPAManager.JPAStop();
 
     }
 
@@ -165,8 +179,8 @@ public class PCBookingApplicationController extends Application {
      */
     public static void main(String[] args) {
         
-        buildTestDatabase();
-        launch(args);
+        //buildTestDatabase();
+         launch(args);
     }
 
 }

@@ -15,20 +15,18 @@ public class JPAManager {
             + "      NOT EXISTS "
             + "          (SELECT * "
             + "           FROM Reservation r "
-            + "           WHERE r.pcBooked.id = p.id and b.Date= :date and b.StartTime= :time)"
-            + ";";
+            + "           WHERE r.pcBooked.id = p.id and b.Date= :date and b.StartTime= :time)";
 
     private static final String loadUserReservationsQuery = ""
             + "SELECT r "
             + "FROM Reservation r "
-            + "WHERE username = :name AND bookingDate >= :date "
-            + ";";
+            + "WHERE username = :name AND bookingDate >= :date ";
+            
 
     private static final String controlReservationQuery = ""
             + "SELECT count(*) as NumPrenotazioni "
             + "FROM Reservation r "
-            + "WHERE r.username=:name and r.startTime=:time and r.bookingDate=:date"
-            + ";";
+            + "WHERE r.username=:name and r.startTime=:time and r.bookingDate=:date";
 
     /**
      * *************************************************
@@ -48,8 +46,7 @@ public class JPAManager {
             + "WHERE r1.roomName NOT IN ( "
             + "      SELECT res1.pcBooked.pcRoom "
             + "      FROM Reservation res1 "
-            + "      WHERE res1.StartTime= :time and res1.Date= :date)"
-            + ";";
+            + "      WHERE res1.StartTime= :time and res1.Date= :date)";
 
     private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
     private static final EntityManager emManager = emFactory.createEntityManager();
@@ -70,7 +67,12 @@ public class JPAManager {
     public static void createRoom(Room newRoom) {
         emManager.persist(newRoom);
     }
-
+    
+    public static PC findPc(long id){
+       PC ret=emManager.find(PC.class,id);
+       return ret;   
+    }
+    
     public static List<Reservation> loadUserReservations(String username) {
         List<Reservation> ret = null;
         Query q = emManager.createQuery(loadUserReservationsQuery, Reservation.class);
@@ -99,16 +101,17 @@ public class JPAManager {
         q.setParameter("time", rTime);
         q.setParameter("date", rDate);
 
-        int numbRes = (int) q.getSingleResult();
+        long numbRes = (long) q.getSingleResult();
         if (numbRes > 0) {
 
             return 0;
 
         }
 
-        emManager.getTransaction().begin();
+        
         try {
             emManager.persist(R);
+            
         } catch (EntityExistsException eee) {
             System.out.println("The entity alredy exists !");
             return -1;

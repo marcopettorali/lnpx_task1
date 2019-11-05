@@ -39,12 +39,12 @@ public class MainPaneGUI extends HBox {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             Reservation selectedReservation = reservationsTable.getSelected();
             if (selectedReservation != null) {
-                String room = selectedReservation.getPcBooked().getPcRoom().getRoomName();
+                /*String room = selectedReservation.getPcBooked().getPcRoom().getRoomName();
                 int PCnumber = selectedReservation.getPcBooked().getPcNumber();
                 String date = selectedReservation.getBookingDate();
-                String hour = selectedReservation.getStartTime();
+                String hour = selectedReservation.getStartTime();*/
                 mapPane.getChildren().removeAll(pcArray);
-                if (PCBookingApplicationController.deleteReservation(User.username, room, PCnumber, date, hour)) {
+                if (PCBookingApplicationController.deleteReservation(selectedReservation)) {
                     List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                     reservationsTable.setItems(userReservations);
                     reservationsTable.relaseSelection();
@@ -72,7 +72,7 @@ public class MainPaneGUI extends HBox {
                 String roomName = selectedRoom.getRoomName();
                 int roomCapacity = selectedRoom.getCapacity();
                 int rowNumber = selectedRoom.getRowsNumber();
-                int avaiablePC = selectedRoom.getAvailablePCs();
+               // int avaiablePC = selectedRoom.getAvailablePCs();
                 int index = availableRoomsTable.getSelectionModel().getFocusedIndex();
                 availableRoomsTable.relaseSelection();
 
@@ -87,12 +87,12 @@ public class MainPaneGUI extends HBox {
                     String localTime = l.toString();
                     String dateString = date.format(formatter);
 
-                    List<PC> avaiablePcList = PCBookingApplicationController.loadAvaiablePCs(roomName, dateString, time);
+                    List<PC> avaiablePcList = PCBookingApplicationController.loadAvailablePCs(roomName, dateString, time);
                     if (!avaiablePcList.isEmpty()) {
                         int indexPcSelected = avaiablePcList.get(0).getPcNumber();
                         int ret = PCBookingApplicationController.reservePC(User.username, roomName, indexPcSelected, dateString, time);
                         if (ret==1) {
-                            selectedRoom.setAvailablePCs(avaiablePC - 1);
+                          //  selectedRoom.setAvailablePCs(avaiablePC - 1);
                             availableRoomsTable.updateRoomsInformation(index, selectedRoom);
                             pcArray = drawMap(rowNumber, roomCapacity, indexPcSelected);
                             mapPane.getChildren().addAll(pcArray);

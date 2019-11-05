@@ -17,6 +17,12 @@ public class Reservation implements Serializable {
     @ManyToOne
     private PC pcBooked; 
     
+    @Transient
+    private String roomN;
+
+    @Transient
+    private int pcnumb;
+
     //@ManyToOne
     //@JoinColumn
     @Column(name="username")
@@ -37,7 +43,16 @@ public class Reservation implements Serializable {
     public String getUsername() {
         return username;
     }
-
+    
+    public int getPcnumb() {
+        return pcnumb;
+    }
+    
+    public String getroomN() {
+        return roomN;
+    }
+    
+    
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
@@ -48,10 +63,20 @@ public class Reservation implements Serializable {
 
     public void setPcBooked(PC pcBooked) {
         this.pcBooked = pcBooked;
+        this.roomN = pcBooked.getPcRoom().getRoomName();
+        this.pcnumb = pcBooked.getPcNumber();
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    public void setPcnumb(int pcnumb) {
+        this.pcnumb = pcnumb;
+    }
+    
+     public void setRoomName(String roomName) {
+        this.roomN = roomName;
     }
      
 }
