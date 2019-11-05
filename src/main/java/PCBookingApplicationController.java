@@ -167,7 +167,10 @@ public class PCBookingApplicationController extends Application {
         res7.setPcBooked(pc3SI3);
         res7.setBookingDate("2019-12-15");
         res7.setStartTime("17:30");
-        res7.setUsername("r.xefraj");  
+        res7.setUsername("r.xefraj"); 
+        
+        
+        
         JPAManager.reservePC(res7);
         
         JPAManager.JPAStop();

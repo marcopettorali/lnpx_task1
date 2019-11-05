@@ -63,6 +63,9 @@ public class Reservation implements Serializable {
 
     public void setPcBooked(PC pcBooked) {
         this.pcBooked = pcBooked;
+    }
+    
+    public void updateTransientFields(){
         this.roomN = pcBooked.getPcRoom().getRoomName();
         this.pcnumb = pcBooked.getPcNumber();
     }

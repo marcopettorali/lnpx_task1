@@ -85,6 +85,9 @@ public class JPAManager {
         q.setParameter("date", localDate);
 
         ret = q.getResultList();
+        for(Reservation r : ret){
+            r.updateTransientFields();
+        }
         return ret;
 
     }

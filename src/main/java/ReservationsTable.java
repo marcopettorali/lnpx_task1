@@ -10,16 +10,19 @@ public class ReservationsTable extends TableView<Reservation> {
 
     ReservationsTable() {
         super();
-        TableColumn Username = new TableColumn("Username");
-        Username.setCellValueFactory(new PropertyValueFactory<>("username"));
+        
         TableColumn Room = new TableColumn("Room");
         Room.setCellValueFactory(new PropertyValueFactory<>("roomN"));
+        
         TableColumn PC = new TableColumn("PC");
         PC.setCellValueFactory(new PropertyValueFactory<>("pcnumb"));
+        
         TableColumn Date = new TableColumn("Date");
         Date.setCellValueFactory(new PropertyValueFactory<>("bookingDate"));
+        
         TableColumn Hour = new TableColumn("Hour");
         Hour.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        
         this.getColumns().addAll(Room,PC,Date,Hour);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
