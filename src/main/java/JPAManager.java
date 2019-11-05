@@ -50,22 +50,23 @@ public class JPAManager {
 
     private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
     private static final EntityManager emManager = emFactory.createEntityManager();
-
-    public static void JPAStart() {
-        emManager.getTransaction().begin();
-    }
-
-    public static void JPAStop() {
-        emManager.getTransaction().commit();
+    
+    public static void close(){
         emManager.close();
+        emFactory.close();
     }
 
     public static void createPC(PC newPC) {
+        emManager.getTransaction().begin();
         emManager.persist(newPC);
+        emManager.getTransaction().commit();
+        
     }
 
     public static void createRoom(Room newRoom) {
+        emManager.getTransaction().begin();
         emManager.persist(newRoom);
+        emManager.getTransaction().commit();
     }
     
     public static PC findPc(long id){
@@ -107,13 +108,15 @@ public class JPAManager {
         long numbRes = (long) q.getSingleResult();
         if (numbRes > 0) {
 
-            return 0;
+            return -2;
 
         }
 
         
         try {
+            emManager.getTransaction().begin();
             emManager.persist(R);
+            emManager.getTransaction().commit();
             
         } catch (EntityExistsException eee) {
             System.out.println("The entity alredy exists !");
@@ -129,9 +132,6 @@ public class JPAManager {
             emManager.getTransaction().begin();
             emManager.remove(r);
             emManager.getTransaction().commit();
-            /* If the emManager.remove(r) removes nothing because it wants a persisted object
-          we have to previously find the target object and after remove it
-             */
         } catch (IllegalArgumentException iae) {
 
             System.out.println("A detached object is passed as parameter instead of persisted Object !");

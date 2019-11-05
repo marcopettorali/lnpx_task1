@@ -35,6 +35,7 @@ public class ReservationsTable extends TableView<Reservation> {
     }
 
     public Reservation getSelected() {
+       
         return this.getSelectionModel().getSelectedItem();
     }
 

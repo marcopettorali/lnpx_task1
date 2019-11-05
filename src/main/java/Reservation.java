@@ -48,7 +48,7 @@ public class Reservation implements Serializable {
         return pcnumb;
     }
     
-    public String getroomN() {
+    public String getRoomN() {
         return roomN;
     }
     

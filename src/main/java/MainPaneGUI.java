@@ -39,12 +39,14 @@ public class MainPaneGUI extends HBox {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             Reservation selectedReservation = reservationsTable.getSelected();
             if (selectedReservation != null) {
-                /*String room = selectedReservation.getPcBooked().getPcRoom().getRoomName();
-                int PCnumber = selectedReservation.getPcBooked().getPcNumber();
-                String date = selectedReservation.getBookingDate();
-                String hour = selectedReservation.getStartTime();*/
-                mapPane.getChildren().removeAll(pcArray);
+                
+                
+                if((mapPane != null)&&(pcArray!=null)){
+                    mapPane.getChildren().removeAll(pcArray);
+                }
+                
                 if (PCBookingApplicationController.deleteReservation(selectedReservation)) {
+                    
                     List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                     reservationsTable.setItems(userReservations);
                     reservationsTable.relaseSelection();
@@ -72,7 +74,7 @@ public class MainPaneGUI extends HBox {
                 String roomName = selectedRoom.getRoomName();
                 int roomCapacity = selectedRoom.getCapacity();
                 int rowNumber = selectedRoom.getRowsNumber();
-               // int avaiablePC = selectedRoom.getAvailablePCs();
+                int avaiablePC = selectedRoom.getAvailablePCs();
                 int index = availableRoomsTable.getSelectionModel().getFocusedIndex();
                 availableRoomsTable.relaseSelection();
 

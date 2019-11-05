@@ -21,6 +21,9 @@ public class Room implements Serializable {
     @OneToMany(mappedBy="pcRoom")
     private Set<PC> PCs;
 
+    @Transient
+    private int availablePCs;
+    
     public String getRoomName() {
         return roomName;
     }

@@ -83,8 +83,7 @@ public class PCBookingApplicationController extends Application {
     }
 
     public static void buildTestDatabase() {
-        
-        JPAManager.JPAStart();
+      
         
         //build Rooms
         Room roomSI1 = Room.createNewRoom("SI1", 6, 2);
@@ -125,7 +124,7 @@ public class PCBookingApplicationController extends Application {
         res1.setPcBooked(pc1SI1);
         res1.setBookingDate("2019-12-01");
         res1.setStartTime("12:30");
-        res1.setUsername("d.lorenzoni");
+        res1.setUsername("d.lorenzoni2");
         JPAManager.reservePC(res1);
         
         Reservation res2 = new Reservation();
@@ -160,7 +159,7 @@ public class PCBookingApplicationController extends Application {
         res6.setPcBooked(pc1SI2);
         res6.setBookingDate("2019-12-02");
         res6.setStartTime("11:30");
-        res6.setUsername("d.lorenzoni");
+        res6.setUsername("d.lorenzoni2");
         JPAManager.reservePC(res6);
         
         Reservation res7 = new Reservation();
@@ -172,8 +171,6 @@ public class PCBookingApplicationController extends Application {
         
         
         JPAManager.reservePC(res7);
-        
-        JPAManager.JPAStop();
 
     }
 
@@ -184,6 +181,8 @@ public class PCBookingApplicationController extends Application {
         
         //buildTestDatabase();
          launch(args);
+         JPAManager.close();
+         System.exit(0);
     }
 
 }
