@@ -32,9 +32,9 @@ public class JPAManager {
      * *************************************************
      */
     private static final String availableRoomsQuery = ""
-            + "SELECT D.roomName, D.capacity - D.booked as available, D.capacity, D.rowsNumber	"
+            + "SELECT D.roomName, D.capacity - D.booked as availablePCs, D.capacity, D.rowsNumber	"
             + "FROM ( "
-            + "      SELECT res.pcBooked.pcRoom as roomName, count(*) as booked ,r.capacity, r.rowsNumber "
+            + "      SELECT r.roomName as roomName, count(*) as booked ,r.capacity, r.rowsNumber "
             + "      FROM Reservation res inner join Room r on (r.roomName=res.pcBooked.pcRoom) "
             + "      WHERE res.startTime= :time and res.bookingDate= :date	"
             + "	     GROUP BY res.pcBooked.pcRoom "
@@ -45,7 +45,7 @@ public class JPAManager {
             + "FROM Room r1 "
             + "WHERE r1.roomName NOT IN ( "
             + "      SELECT res1.pcBooked.pcRoom "
-            + "      FROM Reservation res1 "
+            + "      FROM Reservation res1 inner join pc p on res1.pcBooked_pcId=p.pcId "
             + "      WHERE res1.StartTime= :time and res1.Date= :date)";
 
     private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
@@ -145,8 +145,14 @@ public class JPAManager {
         Query query = emManager.createNativeQuery(JPAManager.availableRoomsQuery, Room.class);
         query.setParameter("time", time);
         query.setParameter("date", date);
-
-        return query.getResultList();
+        
+        List<Room> ret=query.getResultList();
+        
+        for(Room r : ret){
+            r.setAvailablePCs(r.getCapacity());
+        }
+        
+        return ret;
     }
 
     public static List<PC> loadAvailablePCs(String roomName, String date, String time) {

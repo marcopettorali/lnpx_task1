@@ -23,6 +23,11 @@ public class Room implements Serializable {
 
     @Transient
     private int availablePCs;
+
+
+    public int getAvailablePCs() {
+        return availablePCs;
+    }
     
     public String getRoomName() {
         return roomName;
@@ -55,6 +60,10 @@ public class Room implements Serializable {
 
     public void setPCs(Set<PC> PCs) {
         this.PCs = PCs;
+    }
+    
+     public void setAvailablePCs(int availablePCs) {
+        this.availablePCs = availablePCs;
     }
     
     public static Room createNewRoom(String newRoomName,int newRoomCapacity,int newRowsNumber){
