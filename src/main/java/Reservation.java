@@ -6,17 +6,17 @@ import javax.persistence.*;
 public class Reservation implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
-    @Column(name="startTime")
+    @Column(name = "startTime")
     private String startTime;
     @Id
-    @Column(name="bookingDate")
+    @Column(name = "bookingDate")
     private String bookingDate;
     @Id
     @ManyToOne
-    private PC pcBooked; 
-    
+    private PC pcBooked;
+
     @Transient
     private String roomN;
 
@@ -25,7 +25,7 @@ public class Reservation implements Serializable {
 
     //@ManyToOne
     //@JoinColumn
-    @Column(name="username")
+    @Column(name = "username")
     private String username;
 
     public String getStartTime() {
@@ -43,16 +43,15 @@ public class Reservation implements Serializable {
     public String getUsername() {
         return username;
     }
-    
+
     public int getPcnumb() {
         return pcnumb;
     }
-    
+
     public String getRoomN() {
         return roomN;
     }
-    
-    
+
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
@@ -64,8 +63,8 @@ public class Reservation implements Serializable {
     public void setPcBooked(PC pcBooked) {
         this.pcBooked = pcBooked;
     }
-    
-    public void updateTransientFields(){
+
+    public void updateTransientFields() {
         this.roomN = pcBooked.getPcRoom().getRoomName();
         this.pcnumb = pcBooked.getPcNumber();
     }
@@ -73,13 +72,13 @@ public class Reservation implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
     public void setPcnumb(int pcnumb) {
         this.pcnumb = pcnumb;
     }
-    
-     public void setRoomName(String roomName) {
+
+    public void setRoomName(String roomName) {
         this.roomN = roomName;
     }
-     
+
 }

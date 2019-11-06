@@ -66,11 +66,11 @@ public class PCBookingApplicationController extends Application {
     public static int reservePC(String user, String room, int pcnumb, String date, String time) {
         Reservation res = new Reservation();
         res.setBookingDate(date);
-        PC pcBooked=JPAManager.findPc(pcnumb);
+        PC pcBooked = JPAManager.findPc(pcnumb);
         res.setPcBooked(pcBooked);
         res.setStartTime(time);
         res.setUsername(user);
-        
+
         return JPAManager.reservePC(res);
     }
 
@@ -83,8 +83,7 @@ public class PCBookingApplicationController extends Application {
     }
 
     public static void buildTestDatabase() {
-      
-        
+
         //build Rooms
         Room roomSI1 = Room.createNewRoom("SI1", 6, 2);
         Room roomSI2 = Room.createNewRoom("SI2", 6, 3);
@@ -104,14 +103,14 @@ public class PCBookingApplicationController extends Application {
         PC pc3SI2 = PC.createNewPc(3, roomSI2);
         PC pc4SI2 = PC.createNewPc(4, roomSI2);
         PC pc5SI2 = PC.createNewPc(5, roomSI2);
-        
+
         PC pc0SI3 = PC.createNewPc(0, roomSI3);
         PC pc1SI3 = PC.createNewPc(1, roomSI3);
         PC pc2SI3 = PC.createNewPc(2, roomSI3);
         PC pc3SI3 = PC.createNewPc(3, roomSI3);
         PC pc4SI3 = PC.createNewPc(4, roomSI3);
         PC pc5SI3 = PC.createNewPc(5, roomSI3);
-        
+
         //build Reservations
         Reservation res0 = new Reservation();
         res0.setPcBooked(pc0SI1);
@@ -119,57 +118,55 @@ public class PCBookingApplicationController extends Application {
         res0.setStartTime("12:30:00");
         res0.setUsername("m.pettorali");
         JPAManager.reservePC(res0);
-        
+
         Reservation res1 = new Reservation();
         res1.setPcBooked(pc1SI1);
         res1.setBookingDate("2019-12-01");
         res1.setStartTime("12:30:00");
         res1.setUsername("d.lorenzoni2");
         JPAManager.reservePC(res1);
-        
+
         Reservation res2 = new Reservation();
         res2.setPcBooked(pc2SI1);
         res2.setBookingDate("2019-12-01");
         res2.setStartTime("12:30:00");
-        res2.setUsername("r.xefraj");     
+        res2.setUsername("r.xefraj");
         JPAManager.reservePC(res2);
-        
+
         Reservation res3 = new Reservation();
         res3.setPcBooked(pc0SI1);
         res3.setBookingDate("2019-12-02");
         res3.setStartTime("10:30:00");
-        res3.setUsername("r.nocerino");     
+        res3.setUsername("r.nocerino");
         JPAManager.reservePC(res3);
-        
+
         Reservation res4 = new Reservation();
         res4.setPcBooked(pc0SI2);
         res4.setBookingDate("2019-12-02");
         res4.setStartTime("10:30:00");
         res4.setUsername("m.pettorali");
         JPAManager.reservePC(res4);
-       
+
         Reservation res5 = new Reservation();
         res5.setPcBooked(pc1SI2);
         res5.setBookingDate("2019-12-05");
         res5.setStartTime("10:30:00");
         res5.setUsername("r.nocerino");
         JPAManager.reservePC(res5);
-        
+
         Reservation res6 = new Reservation();
         res6.setPcBooked(pc1SI2);
         res6.setBookingDate("2019-12-02");
         res6.setStartTime("11:30:00");
         res6.setUsername("d.lorenzoni2");
         JPAManager.reservePC(res6);
-        
+
         Reservation res7 = new Reservation();
         res7.setPcBooked(pc3SI3);
         res7.setBookingDate("2019-12-15");
         res7.setStartTime("17:30:00");
-        res7.setUsername("r.xefraj"); 
-        
-        
-        
+        res7.setUsername("r.xefraj");
+
         JPAManager.reservePC(res7);
 
     }
@@ -178,11 +175,11 @@ public class PCBookingApplicationController extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-         //buildTestDatabase();
-         launch(args);
-         JPAManager.close();
-         System.exit(0);
+
+        //buildTestDatabase();
+        launch(args);
+        JPAManager.close();
+        System.exit(0);
     }
 
 }

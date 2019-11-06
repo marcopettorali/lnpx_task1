@@ -14,45 +14,35 @@ public class JPAManager {
             + "      and "
             + "      NOT EXISTS "
             + "          (SELECT * "
-            + "           FROM Reservation r "
-            + "           WHERE r.pcBooked.id = p.id and b.Date= :date and b.StartTime= :time)";
+            + "           FROM Reservation r inner join PC on (r.pcBooked = p.pcId)"
+            + "           WHERE Date= :date and b.StartTime= :time)";
 
     private static final String loadUserReservationsQuery = ""
             + "SELECT r "
             + "FROM Reservation r "
             + "WHERE username = :name AND bookingDate >= :date ";
-            
 
     private static final String controlReservationQuery = ""
             + "SELECT count(*) as NumPrenotazioni "
             + "FROM Reservation r "
             + "WHERE r.username=:name and r.startTime=:time and r.bookingDate=:date";
 
+    private static final String loadRoomsQuery = ""
+            + "SELECT r "
+            + "FROM Room r ";
+
     /**
      * *************************************************
      */
-    private static final String availableRoomsQuery = ""
-            + "SELECT D.roomName, D.capacity - D.booked as availablePCs, D.capacity, D.rowsNumber	"
-            + "FROM ( "
-            + "      SELECT r.roomName as roomName, count(*) as booked ,r.capacity, r.rowsNumber "
-            + "      FROM Reservation res inner join pc p on (res.pcBooked_pcId=p.pcId) "
-            +"                      inner join Room r on (r.roomName=p.pcRoom) "
-            + "      WHERE res.startTime= :time and res.bookingDate= :date	"
-            + "	     GROUP BY r.roomName "
-            + "	    ) as D "
-            + "WHERE D.capacity - D.booked > 0 "
-            + "   UNION  "
-            + "SELECT  r1.roomName, r1.capacity, r1.capacity, r1.rowsNumber "
-            + "FROM Room r1 "
-            + "WHERE r1.roomName NOT IN ( "
-            + "      SELECT p.pcRoom "
-            + "      FROM Reservation res1 inner join pc p on res1.pcBooked_pcId=p.pcId "
-            + "      WHERE res1.startTime= :time and res1.bookingDate= :date)";
+    private static final String availablePCInARoomQuery = ""
+            + "SELECT count(*) as CountReservations "
+            + "FROM Reservation r INNER JOIN PC p ON (r.pcBooked = p.pcId) "
+            + "WHERE r.startTime = :time AND r.bookingDate = :date AND p.pcRoom = :room ";
 
     private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
     private static final EntityManager emManager = emFactory.createEntityManager();
-    
-    public static void close(){
+
+    public static void close() {
         emManager.close();
         emFactory.close();
     }
@@ -61,7 +51,7 @@ public class JPAManager {
         emManager.getTransaction().begin();
         emManager.persist(newPC);
         emManager.getTransaction().commit();
-        
+
     }
 
     public static void createRoom(Room newRoom) {
@@ -69,12 +59,12 @@ public class JPAManager {
         emManager.persist(newRoom);
         emManager.getTransaction().commit();
     }
-    
-    public static PC findPc(long id){
-       PC ret=emManager.find(PC.class,id);
-       return ret;   
+
+    public static PC findPc(long id) {
+        PC ret = emManager.find(PC.class, id);
+        return ret;
     }
-    
+
     public static List<Reservation> loadUserReservations(String username) {
         List<Reservation> ret = null;
         Query q = emManager.createQuery(loadUserReservationsQuery, Reservation.class);
@@ -87,7 +77,7 @@ public class JPAManager {
         q.setParameter("date", localDate);
 
         ret = q.getResultList();
-        for(Reservation r : ret){
+        for (Reservation r : ret) {
             r.updateTransientFields();
         }
         return ret;
@@ -113,12 +103,11 @@ public class JPAManager {
 
         }
 
-        
         try {
             emManager.getTransaction().begin();
             emManager.persist(R);
             emManager.getTransaction().commit();
-            
+
         } catch (EntityExistsException eee) {
             System.out.println("The entity alredy exists !");
             return -1;
@@ -141,18 +130,21 @@ public class JPAManager {
         return true;
 
     }
-    
+
     public static List<Room> loadRooms(String date, String time) {
-        Query query = emManager.createNativeQuery(JPAManager.availableRoomsQuery, Room.class);
-        query.setParameter("time", time);
-        query.setParameter("date", date);
-        
-        List<Room> ret=query.getResultList();
-        
-        for(Room r : ret){
-            r.setAvailablePCs(r.getCapacity());
+        Query loadRoomsQ = emManager.createQuery(JPAManager.loadRoomsQuery, Room.class);
+        List<Room> ret = loadRoomsQ.getResultList();
+
+        for (Room room : ret) {
+            Query query = emManager.createQuery(JPAManager.availablePCInARoomQuery, Integer.class);
+            query.setParameter("time", time);
+            query.setParameter("date", date);
+            query.setParameter("room", room);
+            List<Integer> temp = query.getResultList();
+            room.setAvailablePCs(room.getCapacity() - temp.get(0));
         }
-        
+
+        System.out.println(date + " " + time);
         return ret;
     }
 
