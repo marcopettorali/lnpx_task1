@@ -48,6 +48,11 @@ public class MainPaneGUI extends HBox {
                     List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                     reservationsTable.setItems(userReservations);
                     reservationsTable.relaseSelection();
+                    
+                    if(selectedReservation.getBookingDate().equals(availableRoomsTable.getDateDisplayed()) && selectedReservation.getStartTime().equals(availableRoomsTable.getTimeDisplayed())){
+                        availableRoomsTable.setItems(JPAManager.loadRooms(selectedReservation.getBookingDate(), selectedReservation.getStartTime()));
+                    }
+                    
                 } else {
                     errorLabel.setText("There was an error during the deletion of the reservation.");
                 }
@@ -138,6 +143,8 @@ public class MainPaneGUI extends HBox {
                 } else {
                     errorLabel.setText("");
                     String dateString = date.format(formatter);
+                    availableRoomsTable.setDateDisplayed(dateString);
+                    availableRoomsTable.setTimeDisplayed(time);
                     availableRoomsTable.setItems(PCBookingApplicationController.loadRooms(dateString, time));
                     reserveButton.setDisable(false);
                 }

@@ -30,12 +30,12 @@ public class ReservationsTable extends TableView<Reservation> {
     public void setItems(List<Reservation> ArrayReservation) {
         ReservationList = FXCollections.observableArrayList();
         ReservationList.addAll(ArrayReservation);
+        this.getItems().clear();
         this.setItems(ReservationList);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
-    public Reservation getSelected() {
-       
+    public Reservation getSelected(){ 
         return this.getSelectionModel().getSelectedItem();
     }
 

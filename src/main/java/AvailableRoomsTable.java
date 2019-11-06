@@ -7,6 +7,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class AvailableRoomsTable extends TableView<Room> {
 
     private ObservableList<Room> ObListRoom;
+    private String dateDisplayed = "";
+    private String timeDisplayed = "";
 
     AvailableRoomsTable() {
         super();
@@ -23,6 +25,7 @@ public class AvailableRoomsTable extends TableView<Room> {
     public void setItems(List<Room> ArrayRooms) {
         ObListRoom = FXCollections.observableArrayList();
         ObListRoom.addAll(ArrayRooms);
+        this.getItems().clear();
         this.setItems(ObListRoom);
         this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
@@ -40,4 +43,19 @@ public class AvailableRoomsTable extends TableView<Room> {
         this.setItems(ObListRoom);
     }
 
+    public void setDateDisplayed(String dateDisplayed) {
+        this.dateDisplayed = dateDisplayed;
+    }
+
+    public void setTimeDisplayed(String timeDisplayed) {
+        this.timeDisplayed = timeDisplayed;
+    }
+
+    public String getDateDisplayed() {
+        return dateDisplayed;
+    }
+
+    public String getTimeDisplayed() {
+        return timeDisplayed;
+    }
 }

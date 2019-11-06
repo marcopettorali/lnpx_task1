@@ -88,8 +88,11 @@ public class PCBookingApplicationController extends Application {
         Room roomSI1 = Room.createNewRoom("SI1", 6, 2);
         Room roomSI2 = Room.createNewRoom("SI2", 6, 3);
         Room roomSI3 = Room.createNewRoom("SI3", 6, 1);
+        Room roomONE = Room.createNewRoom("Only one pc", 1, 1);
 
         //build PCs
+        PC pcONE = PC.createNewPc(0, roomONE);
+
         PC pc0SI1 = PC.createNewPc(0, roomSI1);
         PC pc1SI1 = PC.createNewPc(1, roomSI1);
         PC pc2SI1 = PC.createNewPc(2, roomSI1);
@@ -166,8 +169,14 @@ public class PCBookingApplicationController extends Application {
         res7.setBookingDate("2019-12-15");
         res7.setStartTime("17:30:00");
         res7.setUsername("r.xefraj");
-
         JPAManager.reservePC(res7);
+
+        Reservation res8 = new Reservation();
+        res8.setPcBooked(pcONE);
+        res8.setBookingDate("2019-12-25");
+        res8.setStartTime("12:30:00");
+        res8.setUsername("m.pettorali");
+        JPAManager.reservePC(res8);
 
     }
 
@@ -175,9 +184,8 @@ public class PCBookingApplicationController extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
         buildTestDatabase();
-        launch(args);
+        //launch(args);
         JPAManager.close();
         System.exit(0);
     }
