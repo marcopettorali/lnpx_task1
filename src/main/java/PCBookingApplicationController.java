@@ -52,8 +52,8 @@ public class PCBookingApplicationController extends Application {
             return false;
         }
     }
-
-    public static List<Room> loadRooms(String date, String time) {
+    
+  public static List<Room> loadRooms(String date, String time) {
         List<Room> rooms = JPAManager.loadRooms(date, time);
         return rooms;
     }
@@ -70,11 +70,12 @@ public class PCBookingApplicationController extends Application {
         res.setPcBooked(pcBooked);
         res.setStartTime(time);
         res.setUsername(user);
-
+        pcBooked.updatePCStat(1);
         return JPAManager.reservePC(res);
     }
 
     public static boolean deleteReservation(Reservation r) {
+        r.getPcBooked().updatePCStat(-1);
         return JPAManager.deleteReservation(r);
     }
 
@@ -124,6 +125,7 @@ public class PCBookingApplicationController extends Application {
 
         Reservation res1 = new Reservation();
         res1.setPcBooked(pc1SI1);
+        pc1SI1.updatePCStat(1);
         res1.setBookingDate("2019-12-01");
         res1.setStartTime("12:30:00");
         res1.setUsername("d.lorenzoni2");
@@ -131,6 +133,7 @@ public class PCBookingApplicationController extends Application {
 
         Reservation res2 = new Reservation();
         res2.setPcBooked(pc2SI1);
+        pc2SI1.updatePCStat(1);
         res2.setBookingDate("2019-12-01");
         res2.setStartTime("12:30:00");
         res2.setUsername("r.xefraj");
@@ -138,6 +141,7 @@ public class PCBookingApplicationController extends Application {
 
         Reservation res3 = new Reservation();
         res3.setPcBooked(pc0SI1);
+        pc0SI1.updatePCStat(1);
         res3.setBookingDate("2019-12-02");
         res3.setStartTime("10:30:00");
         res3.setUsername("r.nocerino");
@@ -145,6 +149,7 @@ public class PCBookingApplicationController extends Application {
 
         Reservation res4 = new Reservation();
         res4.setPcBooked(pc0SI2);
+        pc0SI2.updatePCStat(1);
         res4.setBookingDate("2019-12-02");
         res4.setStartTime("10:30:00");
         res4.setUsername("m.pettorali");
@@ -152,6 +157,7 @@ public class PCBookingApplicationController extends Application {
 
         Reservation res5 = new Reservation();
         res5.setPcBooked(pc1SI2);
+        pc1SI2.updatePCStat(1);
         res5.setBookingDate("2019-12-05");
         res5.setStartTime("10:30:00");
         res5.setUsername("r.nocerino");
@@ -159,6 +165,7 @@ public class PCBookingApplicationController extends Application {
 
         Reservation res6 = new Reservation();
         res6.setPcBooked(pc1SI2);
+        pc1SI2.updatePCStat(1);
         res6.setBookingDate("2019-12-02");
         res6.setStartTime("11:30:00");
         res6.setUsername("d.lorenzoni2");
@@ -166,6 +173,7 @@ public class PCBookingApplicationController extends Application {
 
         Reservation res7 = new Reservation();
         res7.setPcBooked(pc3SI3);
+        pc3SI3.updatePCStat(1);
         res7.setBookingDate("2019-12-15");
         res7.setStartTime("17:30:00");
         res7.setUsername("r.xefraj");
@@ -173,6 +181,7 @@ public class PCBookingApplicationController extends Application {
 
         Reservation res8 = new Reservation();
         res8.setPcBooked(pcONE);
+        pcONE.updatePCStat(1);
         res8.setBookingDate("2019-12-25");
         res8.setStartTime("12:30:00");
         res8.setUsername("m.pettorali");
