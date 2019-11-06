@@ -28,19 +28,27 @@ public class LDBManager {
          * @param mNumber 
          * @return true if success false if this username still exists 
          */
-        public static boolean insertUser(String uname,String pword,String fName,String lName, int mNumber)
-        {
-            String key="user:"+uname.hashCode();
+        public static String insertUser(String uname,String pword,String fName,String lName, int mNumber)
+        { 
             String[] LDBInfo={uname,pword,fName,lName,String.valueOf(mNumber)};
-            String s=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[0])));
-            if(s!=null)
-                return false;
+            String key="user:"+LDBInfo[0]+userDBFormat[0];
+            String s=asString(userDB.get(bytes(key)));
+            int index=0;
+
+            while(s!=null)
+            {
+                index++;
+                LDBInfo[0]= uname+ String.valueOf(index); 
+                key="user:"+LDBInfo[0]+userDBFormat[0];
+                s=asString(userDB.get(bytes(key)));
+            }
+            key="user:"+LDBInfo[0];
             for(int i=0;i<5;i++)
             {
                 String upKey=key+userDBFormat[i];
                 userDB.put(bytes(upKey), bytes(LDBInfo[i]));
             }
-            return true;
+            return LDBInfo[0];
         }
         
         /**
@@ -51,7 +59,7 @@ public class LDBManager {
          */
        public static boolean checkLogin(String uname, String pword)
         {
-            String s=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[1])));
+            String s=asString(userDB.get(bytes("user:"+uname+userDBFormat[1])));
             if(s!=null)
                 return s.compareTo(pword)==0;
             return false;
@@ -65,12 +73,12 @@ public class LDBManager {
        
        public static void loadUserInformation(String uname)
        {
-           User.username=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[0])));
-           User.password=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[1])));
-           User.firstName=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[2])));
-           User.lastName=asString(userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[3])));
-           byte[] MNumb=userDB.get(bytes("user:"+uname.hashCode()+userDBFormat[4]));
-           User.matriculationNumber=MNumb[0];
+           User.username=asString(userDB.get(bytes("user:"+uname+userDBFormat[0])));
+           User.password=asString(userDB.get(bytes("user:"+uname+userDBFormat[1])));
+           User.firstName=asString(userDB.get(bytes("user:"+uname+userDBFormat[2])));
+           User.lastName=asString(userDB.get(bytes("user:"+uname+userDBFormat[3])));
+           String MNumb=asString(userDB.get(bytes("user:"+uname+userDBFormat[4])));
+           User.matriculationNumber=Integer.valueOf(MNumb);
        }
        /**
         * This function deletes from the Database all the informations of the specified user
@@ -81,7 +89,7 @@ public class LDBManager {
        {
             int cont=0;
             DBIterator keyIterator=userDB.iterator();
-            keyIterator.seek(bytes("user:"+uname.hashCode()));
+            keyIterator.seek(bytes("user:"+uname));
             while(keyIterator.hasNext())
             {
                cont++;
