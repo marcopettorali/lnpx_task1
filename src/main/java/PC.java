@@ -19,6 +19,9 @@ public class PC implements Serializable {
     @Column(name="pcNumber")
     private int pcNumber;
     
+    @Column(name="usageStatistics")
+    private int usageStatistics;
+    
     @ManyToOne
     @JoinColumn(name = "pcRoom")
     private Room pcRoom;
@@ -26,6 +29,15 @@ public class PC implements Serializable {
     @OneToMany(mappedBy="pcBooked")
     private Set<Reservation> reservations;
 
+    public int getUsageStatistics() {
+        return usageStatistics;
+    }
+
+    public void setUsageStatistics(int usageStatistics) {
+        this.usageStatistics = usageStatistics;
+    }
+
+    
     public long getPcId() {
         return pcId;
     }
@@ -54,12 +66,20 @@ public class PC implements Serializable {
         this.reservations = reservations;
     }
     
+    public void updatePCStat(int i)
+    {
+                int stat=getUsageStatistics();
+                setUsageStatistics(stat+i);
+                JPAManager.updatePCUsageStatistics(this);
+    }
 
+  
     
     public static PC createNewPc(int newPcNumber,Room newpcRoom){
         PC newPC  = new PC();
         newPC.setPcNumber(newPcNumber);
         newPC.setPcRoom(newpcRoom);
+        newPC.setUsageStatistics(0);
         JPAManager.createPC(newPC);
         return newPC;
     }
