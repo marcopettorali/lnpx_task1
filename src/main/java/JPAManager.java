@@ -159,5 +159,12 @@ public class JPAManager {
         System.out.println(ret);
         return ret;
     }
+    
+    public static void updatePCUsageStatistics(PC p)
+    {
+        emManager.getTransaction().begin();
+        emManager.merge(p);
+        emManager.getTransaction().commit();   
+    }
 
 }
