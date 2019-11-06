@@ -249,7 +249,8 @@ public class MainPaneGUI extends HBox {
 
     }
 
-    private PCIcon[] drawMap(int rowNumber, int roomCapacity, int indexPcSelected) {
+    private PCIcon[] drawMap(int rowNumber, int roomCapacity, int intIndexPcSelected) {
+        
         PCIcon[] pcArray = new PCIcon[roomCapacity];
         int Max = rowNumber;
         double x_offset;
@@ -267,7 +268,7 @@ public class MainPaneGUI extends HBox {
         for (int i = 0; i < roomCapacity; i++) {
             PCIcon NewPc = new PCIcon(i / rowNumber, i % rowNumber, Dim, i % rowNumber * (roomCapacity / rowNumber) + i / rowNumber + 1, x_offset, y_offset);
             pcArray[i] = NewPc;
-            if ((i % rowNumber * (roomCapacity / rowNumber) + i / rowNumber + 1) == indexPcSelected) {
+            if ((i % rowNumber * (roomCapacity / rowNumber) + i / rowNumber ) == intIndexPcSelected) {
                 NewPc.FillYellow();
             }
         }

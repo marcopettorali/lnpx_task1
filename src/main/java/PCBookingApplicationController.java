@@ -176,7 +176,7 @@ public class PCBookingApplicationController extends Application {
      */
     public static void main(String[] args) {
 
-        //buildTestDatabase();
+        buildTestDatabase();
         launch(args);
         JPAManager.close();
         System.exit(0);
