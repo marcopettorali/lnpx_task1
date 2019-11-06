@@ -63,10 +63,10 @@ public class PCBookingApplicationController extends Application {
         return PCs;
     }
 
-    public static int reservePC(String user, String room, int pcnumb, String date, String time) {
+    public static int reservePC(String user, String room, long pcid, String date, String time) {
         Reservation res = new Reservation();
         res.setBookingDate(date);
-        PC pcBooked = JPAManager.findPc(pcnumb);
+        PC pcBooked = JPAManager.findPc(pcid);
         res.setPcBooked(pcBooked);
         res.setStartTime(time);
         res.setUsername(user);

@@ -1,4 +1,3 @@
-
 import java.time.*;
 import java.time.format.*;
 import java.util.ArrayList;
@@ -39,14 +38,13 @@ public class MainPaneGUI extends HBox {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             Reservation selectedReservation = reservationsTable.getSelected();
             if (selectedReservation != null) {
-                
-                
-                if((mapPane != null)&&(pcArray!=null)){
+
+                if ((mapPane != null) && (pcArray != null)) {
                     mapPane.getChildren().removeAll(pcArray);
                 }
-                
+
                 if (PCBookingApplicationController.deleteReservation(selectedReservation)) {
-                    
+
                     List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                     reservationsTable.setItems(userReservations);
                     reservationsTable.relaseSelection();
@@ -89,28 +87,29 @@ public class MainPaneGUI extends HBox {
                     String localTime = l.toString();
                     String dateString = date.format(formatter);
 
-                    List<PC> avaiablePcList = PCBookingApplicationController.loadAvailablePCs(roomName, dateString, time);
-                    if (!avaiablePcList.isEmpty()) {
-                        int indexPcSelected = avaiablePcList.get(0).getPcNumber();
+                    List<PC> availablePcList = PCBookingApplicationController.loadAvailablePCs(roomName, dateString, time);
+                    if (!availablePcList.isEmpty()) {
+                        long indexPcSelected = availablePcList.get(0).getPcId();
+                        int intIndexPcSelected = availablePcList.get(0).getPcNumber();
                         int ret = PCBookingApplicationController.reservePC(User.username, roomName, indexPcSelected, dateString, time);
-                        if (ret==1) {
+                        if (ret == 1) {
                             selectedRoom.setAvailablePCs(availablePCs - 1);
                             availableRoomsTable.updateRoomsInformation(index, selectedRoom);
-                            pcArray = drawMap(rowNumber, roomCapacity, indexPcSelected);
+                            pcArray = drawMap(rowNumber, roomCapacity, intIndexPcSelected);
                             mapPane.getChildren().addAll(pcArray);
 
                             List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                             reservationsTable.setItems(userReservations);
-                        }else if(ret == -1){
+                        } else if (ret == -2) {
                             errorLabel.setText("You have already booked another PC for the specified date and time");
-                        }else if(ret == -2){
+                        } else if (ret == -1) {
                             errorLabel.setText("The selected PC is already occupied");
-                        }else{
+                        } else {
                             errorLabel.setText("An error occured during the reservation. Try again later.");
                         }
 
                     } else {
-                        errorLabel.setText("No PC available in this room.");
+                        errorLabel.setText("No available PCs in this room.");
                     }
                 }
 
