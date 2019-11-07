@@ -15,10 +15,13 @@ import javafx.stage.*;
 public class PCBookingApplicationController extends Application {
 
     private static Stage loginStage;
+    private static Stage signupStage;
     private static Stage mainStage;
 
     private static void loadLoginPane() {
-        loginStage = new Stage();
+        mainStage.close();
+        signupStage.close();
+
         loginStage.setTitle("Login");
         loginStage.setResizable(false);
         loginStage.setScene(new Scene(new Group(new LoginPaneGUI())));
@@ -26,8 +29,21 @@ public class PCBookingApplicationController extends Application {
         loginStage.show();
     }
 
+    private static void loadSignupPane() {
+        loginStage.close();
+        mainStage.close();
+
+        signupStage = new Stage();
+        signupStage.setTitle("Sign up");
+        signupStage.setResizable(false);
+        signupStage.setScene(new Scene(new Group(new SignupPaneGUI())));
+        signupStage.sizeToScene();
+        signupStage.show();
+    }
+
     private static void loadMainPane() {
         loginStage.close();
+        signupStage.close();
 
         mainStage = new Stage();
         mainStage.setTitle("PC Booking");
@@ -39,8 +55,15 @@ public class PCBookingApplicationController extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        loginStage = new Stage();
+        signupStage = new Stage();
+        mainStage = new Stage();
         LDBManager.InsertTemporary();
         loadLoginPane();
+    }
+
+    public static void loadSignupForm() {
+        loadSignupPane();
     }
 
     public static boolean login(String username, String password) {
@@ -53,7 +76,11 @@ public class PCBookingApplicationController extends Application {
         }
     }
     
-  public static List<Room> loadRooms(String date, String time) {
+    public static boolean signup(int matriculation, String firstName, String lastName, String password) {
+        
+    }
+
+    public static List<Room> loadRooms(String date, String time) {
         List<Room> rooms = JPAManager.loadRooms(date, time);
         return rooms;
     }
@@ -193,8 +220,8 @@ public class PCBookingApplicationController extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        buildTestDatabase();
-        //launch(args);
+        //buildTestDatabase();
+        launch(args);
         JPAManager.close();
         System.exit(0);
     }
