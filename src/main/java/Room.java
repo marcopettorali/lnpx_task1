@@ -6,7 +6,6 @@ import javax.persistence.*;
 @Entity
 public class Room implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "roomName")
     private String roomName;

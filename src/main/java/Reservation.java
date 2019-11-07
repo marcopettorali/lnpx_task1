@@ -5,8 +5,6 @@ import javax.persistence.*;
 @Entity
 public class Reservation implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @Column(name = "startTime")
     private String startTime;

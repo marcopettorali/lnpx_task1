@@ -32,7 +32,7 @@ public class SignupPaneGUI extends AnchorPane {
         signupButton.setMaxWidth(Double.MAX_VALUE);
         signupButton.setMnemonicParsing(false);
         signupButton.setText("REGISTER");
-        VBox.setMargin(signupButton, new Insets(30.0, 0.0, 0.0, 0.0));
+        VBox.setMargin(signupButton, new Insets(0.0, 0.0, 0.0, 0.0));
         signupButton.setOnAction(e -> {
             
             String matriculationString = matriculationTextField.getText();
