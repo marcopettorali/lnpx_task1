@@ -60,7 +60,6 @@ public class PCBookingApplicationController extends Application {
         signupStage = new Stage();
         mainStage = new Stage();
         signupPaneGUI = new SignupPaneGUI();
-        LDBManager.InsertTemporary();
         loadLoginPane();
     }
 
@@ -226,10 +225,11 @@ public class PCBookingApplicationController extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //buildTestDatabase();
-        launch(args);
-        JPAManager.close();
-        System.exit(0);
+          buildTestDatabase();
+          LDBManager.InsertTemporary();
+          //launch(args);
+          JPAManager.close();
+          System.exit(0);
     }
 
 }
