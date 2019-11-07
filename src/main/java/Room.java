@@ -3,32 +3,30 @@ import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
 
-
 @Entity
 public class Room implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name="roomName")
+    @Column(name = "roomName")
     private String roomName;
-    
-    @Column(name="capacity")
+
+    @Column(name = "capacity")
     private int capacity;
-    
-    @Column(name="rowsNumber")
+
+    @Column(name = "rowsNumber")
     private int rowsNumber;
-    
-    @OneToMany(mappedBy="pcRoom")
+
+    @OneToMany(mappedBy = "pcRoom")
     private Set<PC> PCs;
 
     @Transient
     private int availablePCs;
 
-
     public int getAvailablePCs() {
         return availablePCs;
     }
-    
+
     public String getRoomName() {
         return roomName;
     }
@@ -40,7 +38,6 @@ public class Room implements Serializable {
     public int getRowsNumber() {
         return rowsNumber;
     }
-
 
     public Set<PC> getPCs() {
         return PCs;
@@ -61,13 +58,13 @@ public class Room implements Serializable {
     public void setPCs(Set<PC> PCs) {
         this.PCs = PCs;
     }
-    
-     public void setAvailablePCs(int availablePCs) {
+
+    public void setAvailablePCs(int availablePCs) {
         this.availablePCs = availablePCs;
     }
-    
-    public static Room createNewRoom(String newRoomName,int newRoomCapacity,int newRowsNumber){
-        Room newRoom  = new Room();
+
+    public static Room createNewRoom(String newRoomName, int newRoomCapacity, int newRowsNumber) {
+        Room newRoom = new Room();
         newRoom.setRoomName(newRoomName);
         newRoom.setCapacity(newRoomCapacity);
         newRoom.setRowsNumber(newRowsNumber);

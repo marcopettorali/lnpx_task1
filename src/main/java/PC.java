@@ -13,20 +13,20 @@ public class PC implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="pcId")
+    @Column(name = "pcId")
     private long pcId;
 
-    @Column(name="pcNumber")
+    @Column(name = "pcNumber")
     private int pcNumber;
-    
-    @Column(name="usageStatistics")
+
+    @Column(name = "usageStatistics")
     private int usageStatistics;
-    
+
     @ManyToOne
     @JoinColumn(name = "pcRoom")
     private Room pcRoom;
 
-    @OneToMany(mappedBy="pcBooked")
+    @OneToMany(mappedBy = "pcBooked")
     private Set<Reservation> reservations;
 
     public int getUsageStatistics() {
@@ -37,11 +37,10 @@ public class PC implements Serializable {
         this.usageStatistics = usageStatistics;
     }
 
-    
     public long getPcId() {
         return pcId;
     }
-    
+
     public int getPcNumber() {
         return pcNumber;
     }
@@ -65,18 +64,15 @@ public class PC implements Serializable {
     public void setReservations(Set<Reservation> reservations) {
         this.reservations = reservations;
     }
-    
-    public void updatePCStat(int i)
-    {
-                int stat=getUsageStatistics();
-                setUsageStatistics(stat+i);
-                JPAManager.updatePCUsageStatistics(this);
+
+    public void updatePCStat(int i) {
+        int stat = getUsageStatistics();
+        setUsageStatistics(stat + i);
+        JPAManager.updatePC(this);
     }
 
-  
-    
-    public static PC createNewPc(int newPcNumber,Room newpcRoom){
-        PC newPC  = new PC();
+    public static PC createNewPc(int newPcNumber, Room newpcRoom) {
+        PC newPC = new PC();
         newPC.setPcNumber(newPcNumber);
         newPC.setPcRoom(newpcRoom);
         newPC.setUsageStatistics(0);
@@ -84,4 +80,3 @@ public class PC implements Serializable {
         return newPC;
     }
 }
-

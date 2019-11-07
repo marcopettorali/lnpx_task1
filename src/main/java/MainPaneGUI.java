@@ -1,3 +1,4 @@
+
 import java.time.*;
 import java.time.format.*;
 import java.util.ArrayList;
@@ -48,11 +49,11 @@ public class MainPaneGUI extends HBox {
                     List<Reservation> userReservations = PCBookingApplicationController.loadUserReservations(User.username);
                     reservationsTable.setItems(userReservations);
                     reservationsTable.relaseSelection();
-                    
-                    if(selectedReservation.getBookingDate().equals(availableRoomsTable.getDateDisplayed()) && selectedReservation.getStartTime().equals(availableRoomsTable.getTimeDisplayed())){
+
+                    if (selectedReservation.getBookingDate().equals(availableRoomsTable.getDateDisplayed()) && selectedReservation.getStartTime().equals(availableRoomsTable.getTimeDisplayed())) {
                         availableRoomsTable.setItems(JPAManager.loadRooms(selectedReservation.getBookingDate(), selectedReservation.getStartTime()));
                     }
-                    
+
                 } else {
                     errorLabel.setText("There was an error during the deletion of the reservation.");
                 }
@@ -257,7 +258,7 @@ public class MainPaneGUI extends HBox {
     }
 
     private PCIcon[] drawMap(int rowNumber, int roomCapacity, int intIndexPcSelected) {
-        
+
         PCIcon[] pcArray = new PCIcon[roomCapacity];
         int Max = rowNumber;
         double x_offset;
@@ -275,7 +276,7 @@ public class MainPaneGUI extends HBox {
         for (int i = 0; i < roomCapacity; i++) {
             PCIcon NewPc = new PCIcon(i / rowNumber, i % rowNumber, Dim, i % rowNumber * (roomCapacity / rowNumber) + i / rowNumber + 1, x_offset, y_offset);
             pcArray[i] = NewPc;
-            if ((i % rowNumber * (roomCapacity / rowNumber) + i / rowNumber ) == intIndexPcSelected) {
+            if ((i % rowNumber * (roomCapacity / rowNumber) + i / rowNumber) == intIndexPcSelected) {
                 NewPc.FillYellow();
             }
         }

@@ -2,7 +2,7 @@
 import java.util.*;
 import javafx.collections.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.*;
 
 public class AvailableRoomsTable extends TableView<Room> {
 

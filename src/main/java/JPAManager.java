@@ -6,8 +6,10 @@ import java.util.*;
 import javax.persistence.*;
 
 public class JPAManager {
+    
+    private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
+    private static final EntityManager emManager = emFactory.createEntityManager();
 
-    //CHECKED
     private static final String availablePCsQuery = ""
             + "SELECT * "
             + "FROM PC p "
@@ -32,16 +34,10 @@ public class JPAManager {
             + "SELECT r "
             + "FROM Room r ";
 
-    /**
-     * *************************************************
-     */
     private static final String availablePCInARoomQuery = ""
             + "SELECT count(*) as CountReservations "
             + "FROM Reservation r INNER JOIN PC p ON (r.pcBooked_pcId = p.pcId) "
             + "WHERE r.startTime = :time AND r.bookingDate = :date AND p.pcRoom = :room ";
-
-    private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("lnpx_lnpx_task1_jar_1.0-SNAPSHOTPU");
-    private static final EntityManager emManager = emFactory.createEntityManager();
 
     public static void close() {
         emManager.close();
@@ -61,7 +57,7 @@ public class JPAManager {
         emManager.getTransaction().commit();
     }
 
-    public static PC findPc(long id) {
+    public static PC findPcById(long id) {
         PC ret = emManager.find(PC.class, id);
         return ret;
     }
@@ -140,9 +136,9 @@ public class JPAManager {
             query.setParameter("time", time);
             query.setParameter("date", date);
             query.setParameter("room", room);
-            int temp =((BigInteger) query.getSingleResult()).intValue();
+            int temp = ((BigInteger) query.getSingleResult()).intValue();
             room.setAvailablePCs(room.getCapacity() - temp);
-            
+
         }
 
         System.out.println(date + " " + time);
@@ -150,21 +146,20 @@ public class JPAManager {
     }
 
     public static List<PC> loadAvailablePCs(String roomName, String date, String time) {
-        System.out.println(roomName+ " "+date+" "+time);
+        System.out.println(roomName + " " + date + " " + time);
         Query query = emManager.createNativeQuery(JPAManager.availablePCsQuery, PC.class);
         query.setParameter("roomname", roomName);
         query.setParameter("date", date);
         query.setParameter("time", time);
-        List<PC> ret=query.getResultList();
+        List<PC> ret = query.getResultList();
         System.out.println(ret);
         return ret;
     }
-    
-    public static void updatePCUsageStatistics(PC p)
-    {
+
+    public static void updatePC(PC p) {
         emManager.getTransaction().begin();
         emManager.merge(p);
-        emManager.getTransaction().commit();   
+        emManager.getTransaction().commit();
     }
 
 }
