@@ -29,7 +29,10 @@ public class LDBManager {
      * @param mNumber
      * @return true if success false if this username still exists
      */
-    public static String insertUser(String uname, String pword, String fName, String lName, int mNumber) {
+    public static String insertUser(String pword, String fName, String lName, int mNumber) {
+
+        String uname = fName.charAt(0) + "." + lName;
+
         String[] LDBInfo = {uname, pword, fName, lName, String.valueOf(mNumber)};
         String key = "user:" + LDBInfo[0] + userDBFormat[0];
         String s = asString(userDB.get(bytes(key)));
@@ -102,9 +105,9 @@ public class LDBManager {
      * Temporary insert of Users in the key-value DB
      */
     public static void InsertTemporary() {
-        LDBManager.insertUser("r.xefraj", "r.xefraj", "Riccardo", "Xefraj", 547897);
-        LDBManager.insertUser("d.lorenzoni2", "d.lorenzoni2", "Dario", "Lorenzoni", 546619);
-        LDBManager.insertUser("m.pettorali", "m.pettorali", "Marco", "Pettorali", 555444);
-        LDBManager.insertUser("r.nocerino", "r.nocerino", "Raffaele", "Nocerino", 530199);
+        LDBManager.insertUser("r.xefraj", "Riccardo", "Xefraj", 547897);
+        LDBManager.insertUser("d.lorenzoni", "Dario", "Lorenzoni", 546619);
+        LDBManager.insertUser("m.pettorali", "Marco", "Pettorali", 555444);
+        LDBManager.insertUser("r.nocerino", "Raffaele", "Nocerino", 530199);
     }
 }

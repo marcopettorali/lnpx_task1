@@ -16,6 +16,7 @@ public class PCBookingApplicationController extends Application {
 
     private static Stage loginStage;
     private static Stage signupStage;
+    private static SignupPaneGUI signupPaneGUI;
     private static Stage mainStage;
 
     private static void loadLoginPane() {
@@ -36,7 +37,7 @@ public class PCBookingApplicationController extends Application {
         signupStage = new Stage();
         signupStage.setTitle("Sign up");
         signupStage.setResizable(false);
-        signupStage.setScene(new Scene(new Group(new SignupPaneGUI())));
+        signupStage.setScene(new Scene(new Group(signupPaneGUI)));
         signupStage.sizeToScene();
         signupStage.show();
     }
@@ -58,12 +59,17 @@ public class PCBookingApplicationController extends Application {
         loginStage = new Stage();
         signupStage = new Stage();
         mainStage = new Stage();
+        signupPaneGUI = new SignupPaneGUI();
         LDBManager.InsertTemporary();
         loadLoginPane();
     }
 
     public static void loadSignupForm() {
         loadSignupPane();
+    }
+
+    public static void backToLoginForm() {
+        loadLoginPane();
     }
 
     public static boolean login(String username, String password) {
@@ -75,9 +81,9 @@ public class PCBookingApplicationController extends Application {
             return false;
         }
     }
-    
-    public static boolean signup(int matriculation, String firstName, String lastName, String password) {
-        
+
+    public static String signup(int matriculation, String firstName, String lastName, String password) {
+        return LDBManager.insertUser(password, firstName, lastName, matriculation);
     }
 
     public static List<Room> loadRooms(String date, String time) {
