@@ -1,4 +1,4 @@
-
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -220,13 +220,30 @@ public class PCBookingApplicationController extends Application {
         JPAManager.reservePC(res8);
 
     }
+    
+    private static void checkFirstExecution(){
+        try(
+            FileInputStream is=new FileInputStream("./CheckFirstExecution.txt");
+            DataInputStream dis=new DataInputStream(is);    
+            FileOutputStream os=new FileOutputStream("./CheckFirstExecuton.txt");
+            DataOutputStream dos=new DataOutputStream(os);    
+           ){
+            //int value=dis.readInt();
+            //System.out.println(value);
+          }catch(IOException io){
+              System.out.println("An error during the opening of checkFirstExecution !");
+          }
+        
+        
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-          buildTestDatabase();
-          LDBManager.InsertTemporary();
+          checkFirstExecution();
+          //buildTestDatabase();
+          //LDBManager.InsertTemporary();
           //launch(args);
           JPAManager.close();
           System.exit(0);

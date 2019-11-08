@@ -94,7 +94,6 @@ public class JPAManager {
         q.setParameter("date", rDate);
 
         long numbRes = (long) q.getSingleResult();
-        System.out.println(numbRes);
         if (numbRes > 0) {
             return -2;
         }
