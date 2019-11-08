@@ -2,9 +2,17 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.scene.*;
 import javafx.stage.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 /**
  * PCBookingGUI is the main class of the application. It builds the GUI of the
@@ -222,17 +230,54 @@ public class PCBookingApplicationController extends Application {
     }
     
     private static void checkFirstExecution(){
+        File f=new File("./CheckFirstExecution.txt");
         try(
-            FileInputStream is=new FileInputStream("./CheckFirstExecution.txt");
-            DataInputStream dis=new DataInputStream(is);    
-            FileOutputStream os=new FileOutputStream("./CheckFirstExecuton.txt");
-            DataOutputStream dos=new DataOutputStream(os);    
+            FileReader fr=new FileReader(f);
+            BufferedReader br=new BufferedReader(fr);    
+                
            ){
-            //int value=dis.readInt();
-            //System.out.println(value);
+            String value=br.readLine();
+            int res=Integer.parseInt(value);
+            if(res==0){
+                
+                File xml=new File("./src/main/resources/META-INF/persistence.xml");
+                
+                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+                Document doc = docBuilder.parse(xml);
+                org.w3c.dom.Node properties=doc.getElementsByTagName("properties").item(0);
+                 org.w3c.dom.Node property=doc.getElementsByTagName("property").item(6);
+                
+                /*NamedNodeMap attr=property.getAttributes();
+                org.w3c.dom.Node nodeattr=attr.getNamedItem("value");
+                String val = nodeattr.getNodeValue();
+                nodeattr.setNodeValue("drop-and-create");*/
+                properties.removeChild(property);
+                
+                Transformer xformer = TransformerFactory.newInstance().newTransformer();
+                xformer.transform(new DOMSource(doc), new StreamResult(new File("./src/main/resources/META-INF/persistence.xml")));
+                
+                buildTestDatabase();
+                LDBManager.InsertTemporary();
+                
+                FileWriter fw=new FileWriter(f,false);
+                fw.write("1");
+                fw.close();
+                             
+            }
+            
+            
           }catch(IOException io){
               System.out.println("An error during the opening of checkFirstExecution !");
-          }
+          }catch(SAXException sax){
+              System.out.println("Error during opening the DOM file!");
+          } catch(ParserConfigurationException ex) {
+            Logger.getLogger(PCBookingApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(PCBookingApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(PCBookingApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
     }
@@ -242,9 +287,7 @@ public class PCBookingApplicationController extends Application {
      */
     public static void main(String[] args) {
           checkFirstExecution();
-          //buildTestDatabase();
-          //LDBManager.InsertTemporary();
-          //launch(args);
+          launch(args);
           JPAManager.close();
           System.exit(0);
     }
