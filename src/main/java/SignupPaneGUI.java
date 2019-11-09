@@ -35,6 +35,7 @@ public class SignupPaneGUI extends AnchorPane {
         VBox.setMargin(signupButton, new Insets(0.0, 0.0, 0.0, 0.0));
         signupButton.setOnAction(e -> {
             
+            errorLabel.setText("");
             String matriculationString = matriculationTextField.getText();
             String firstName = firstNameTextField.getText();
             String lastName = lastNameTextField.getText();
